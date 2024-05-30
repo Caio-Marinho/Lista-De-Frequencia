@@ -5,16 +5,16 @@
 
 ## Instalação
 
-    Windows
-    [Intale o python versão 3.12.0](https://www.python.org/downloads/release/python-3120/)
+Windows
+[Intale o python versão 3.12.0](https://www.python.org/downloads/release/python-3120/)
     
-    Para Visualização do Projeto, primeiro clone ele em seu ambiente local
+Para Visualização do Projeto, primeiro clone ele em seu ambiente local
 
 ```bash
 git clone https://github.com/Caio-Marinho/Lista-De-Frequencia.git
 ```
 
-    Em seguida acesse o repositório e Crie o Ambiente Virtual
+Em seguida acesse o repositório e Crie o Ambiente Virtual
 
 ```
 python -m venv ven
