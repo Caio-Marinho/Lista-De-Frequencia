@@ -8,7 +8,7 @@
     
     Para Visualização do Projeto, primeiro clone ele em seu ambiente local
     ```bash
-        https://github.com/Caio-Marinho/Lista-De-Frequencia.git
+        git clone https://github.com/Caio-Marinho/Lista-De-Frequencia.git
     ```
     Em seguida acesse o repositório e Crie o Ambiente Virtual
     ---
