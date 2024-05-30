@@ -2,12 +2,13 @@
     Projeto Desenvolvido para Recebido dos Calouros de Gestão da Informação na Universidade Federal de Pernambuco
     com o intuito de Registrar frequecia desses discentes(estudantes) para gerar futuramente certificados de participação 
 
-# Instalação
+## Instalação
     Windows
-    Intale o python versão 3.12.0(https://www.python.org/downloads/release/python-3120/)
+    [Intale o python versão 3.12.0](https://www.python.org/downloads/release/python-3120/)
     
     Para Visualização do Projeto, primeiro clone ele em seu ambiente local
     ```bash
+        https://github.com/Caio-Marinho/Lista-De-Frequencia.git
     ```
     Em seguida acesse o repositório e Crie o Ambiente Virtual
     ---
@@ -30,5 +31,5 @@
     ```
     
 ## Autor
-    @[Caio-Marinho](https://github.com/Caio-Marinho)
+    [@Caio-Marinho](https://github.com/Caio-Marinho)
 
