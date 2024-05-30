@@ -40,7 +40,7 @@ def create_app() -> Flask:  # O '-> Flask' indica que esta função retornará u
     app.config.from_object(Config)  # Carregando as configurações do arquivo config.py.
     db.init_app(app)  # Inicializando o banco de dados com a instância do aplicativo Flask.
     ma.init_app(app)  # Inicializando o Marshmallow com a instância do aplicativo Flask.
-    migrate.init_app(app)  # Inicializando o Flask-Migrate com a instância do aplicativo Flask.
+    migrate.init_app(app,db)  # Inicializando o Flask-Migrate com a instância do aplicativo Flask.
     
 
     # Criando todas as tabelas no banco de dados quando o aplicativo é executado diretamente.
