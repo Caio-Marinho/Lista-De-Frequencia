@@ -66,7 +66,7 @@ def frequencia() -> jsonify:  # O '-> jsonify' indica o retorno como um JSON
             # Adiciona registro de frequência baseado nas condições especificadas
             if (not usuario_calouro) :
                 dados_novos = add_Calouros(dados['student-name'], dados['email'])
-            elif (not usuario_voluntario) and sua_data1 <= data_limite:
+            elif (not usuario_voluntario) and (sua_data1 <= data_limite):
                 dados_novos = add_Volountarios(dados['student-name'], dados['email'])
             else:
                 dados_novos = dicionario_resposta(dados['student-name'], dados['email'])
