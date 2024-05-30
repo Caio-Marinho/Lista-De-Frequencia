@@ -84,4 +84,4 @@ def dicionario_resposta(Nome: str, email: str) -> dict:
         dict: Um dicionário contendo o nome do aluno ou voluntário, email e a contagem de registros associados ao email.
     """
     # Retorna um dicionário com os dados do aluno ou voluntário e a contagem de registros para o email.
-    return {'student-name': Nome, 'email': email, 'count': int(Voluntarios.query.filter_by(email=email).count())}
+    return {'student-name': Nome, 'email': email, 'count': int(Calouros.query.filter_by(email=email).count())}

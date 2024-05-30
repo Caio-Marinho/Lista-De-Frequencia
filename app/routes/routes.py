@@ -17,8 +17,8 @@ import os
 from typing import Union
 
 # Importa funções de consulta e adição específicas do sistema.
-from app.quey.consultar import consulta_geral_Calouros, consulta_frequencia_Calouros, consulta_frequencia_Voluntarios, dicionario_resposta
-from app.quey.adicionar import add_Calouros, add_Volountarios
+from app.query.consultar import consulta_geral_Calouros, consulta_frequencia_Calouros, consulta_frequencia_Voluntarios, dicionario_resposta
+from app.query.adicionar import add_Calouros, add_Volountarios
 
 # Cria uma instância de Blueprint para rotas chamada 'routes'.
 bp = Blueprint('routes', __name__)
@@ -64,9 +64,9 @@ def frequencia() -> jsonify:  # O '-> jsonify' indica o retorno como um JSON
             print(usuario_voluntario)
             
             # Adiciona registro de frequência baseado nas condições especificadas
-            if (not usuario_calouro) and sua_data1 <= data_limite:
+            if (not usuario_calouro) :
                 dados_novos = add_Calouros(dados['student-name'], dados['email'])
-            elif (not usuario_voluntario):
+            elif (not usuario_voluntario) and sua_data1 <= data_limite:
                 dados_novos = add_Volountarios(dados['student-name'], dados['email'])
             else:
                 dados_novos = dicionario_resposta(dados['student-name'], dados['email'])
