@@ -8,8 +8,10 @@ from config import Config  # Config é um módulo que contém as configurações
 import mysql.connector  # mysql.connector é um driver de banco de dados que permite a conexão com o MySQL.
 from flask_cors import CORS  # flask_cors é uma extensão para lidar com o CORS (Cross-Origin Resource Sharing), permitindo que o seu aplicativo seja acessado por outros domínios.
 from flaskenv import arquivo_env # Criar um arquivo env para o ambiente de desenvolvimento aplicando algumas variaveis
-import asyncio
+import asyncio # Importa a biblioteca asyncio para suporte a programação assíncrona.
+
 asyncio.run(arquivo_env()) # Cria um arquivo env para o ambiente de desenvolvimento aplicando algumas variaveis
+
 def create_database() -> None:  # O '-> None' indica que esta função não retornará nada.
     """
     Função para criar o banco de dados.
