@@ -3,6 +3,7 @@
     com o intuito de Registrar frequecia desses discentes(estudantes) para gerar futuramente certificados de participação 
 
 ## Instalação
+
     Windows
     [Intale o python versão 3.12.0](https://www.python.org/downloads/release/python-3120/)
     
@@ -11,7 +12,7 @@
     ```bash
         git clone https://github.com/Caio-Marinho/Lista-De-Frequencia.git
     ```
-    
+
     Em seguida acesse o repositório e Crie o Ambiente Virtual
 
     ```
