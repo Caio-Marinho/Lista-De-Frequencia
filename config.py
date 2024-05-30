@@ -18,7 +18,7 @@ class Config:
 
     # Define a URI do banco de dados para MySQL.
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI',
-                                             'mysql+mysqlconnector://root:teste@localhost:3306/frequencia')
+                                             'mysql+mysqlconnector://username:password@hostname:port/database')
     """
     
     URI de conexão para um banco de dados MySQL.
