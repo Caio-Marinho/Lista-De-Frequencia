@@ -21,7 +21,7 @@ Em seguida acesse o repositório e Crie o Ambiente Virtual
 ```
 python -m venv ven
 ```
-Inicie o Ambiente
+Inicie o Ambiente Virtual
 ```
 ./venv/scripts/activate
 ```
