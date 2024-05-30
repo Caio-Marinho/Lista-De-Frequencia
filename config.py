@@ -1,10 +1,22 @@
 import os
-
+import sqlalchemy
 
 class Config:
     """Configuração básica para a aplicação."""
 
     # Configurações básicas
+    def create_database() -> None:
+        """
+        Função para criar o banco de dados.
+        
+        Esta função se conecta ao servidor MySQL e executa uma consulta SQL para criar o banco de dados 'FREQUENCIA' se ele não existir.
+        
+        Returns:
+            None
+        """
+        engine = sqlalchemy.create_engine('mysql+mysqlconnector://root:teste@localhost:3306/')
+        with engine.connect() as connection:
+           connection.execute(sqlalchemy.text("CREATE DATABASE IF NOT EXISTS FREQUENCIA;"))
 
     # A chave secreta é usada para proteger sessões e cookies gerados pelo Flask.
     # A chave secreta deve ser mantida em segredo e nunca deve ser compartilhada publicamente.
@@ -18,7 +30,18 @@ class Config:
 
     # Define a URI do banco de dados para MySQL.
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI',
-                                             'mysql+mysqlconnector://username:password@hostname:port/database')
+                                             'mysql+mysqlconnector://root:teste@localhost:3306/frequencia')
+    
+    # Define se as modificações no banco de dados devem ser rastreadas. Isso ajuda no controle de versão do banco de
+    # dados.
+    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS',
+                                                    True)  # Desative para evitar avisos de desempenho.
+
+    # Define se os modelos devem ser recarregados automaticamente sempre que forem modificados.
+    # Isso é útil durante o desenvolvimento, mas deve ser desativado em produção para melhorar o desempenho.
+    TEMPLATES_AUTO_RELOAD = os.environ.get('TEMPLATES_AUTO_RELOAD', True)
+
+    
     """
     
     URI de conexão para um banco de dados MySQL.
@@ -95,12 +118,3 @@ class Config:
     Exemplo:
         mssql+pyodbc://username:password@hostname:port/database?driver=ODBC+Driver+17+for+SQL+Server
     """
-
-    # Define se as modificações no banco de dados devem ser rastreadas. Isso ajuda no controle de versão do banco de
-    # dados.
-    SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS',
-                                                    True)  # Desative para evitar avisos de desempenho.
-
-    # Define se os modelos devem ser recarregados automaticamente sempre que forem modificados.
-    # Isso é útil durante o desenvolvimento, mas deve ser desativado em produção para melhorar o desempenho.
-    TEMPLATES_AUTO_RELOAD = os.environ.get('TEMPLATES_AUTO_RELOAD', True)
