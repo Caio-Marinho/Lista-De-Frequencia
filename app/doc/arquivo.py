@@ -7,7 +7,7 @@ import os # Importa a biblioteca os para operações do sistema, como manipulaç
 
 class Arquivo:
     """
-    Classe utilitária para processamento de dados, registro e criação de arquivo Excel.
+     Classe utilitária para processamento de dados, registro e criação de arquivo Excel.
     """
 
     def __init__(self, id: list, nome: list, email: list, data: list, horas: list):
