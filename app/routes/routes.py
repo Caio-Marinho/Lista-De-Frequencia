@@ -1,11 +1,8 @@
-# importa componentes do micro framework Flask que serve para criar aplicações web
+# Importa componentes do micro framework Flask que serve para criar aplicações web
 from flask import Blueprint, request, render_template, jsonify, send_file, redirect, url_for
 
 # Importa date e datetime para manipulação de datas.
 from datetime import date, datetime
-
-# Remove acentos de strings.
-from unidecode import unidecode
 
 # Função personalizada 'Funcion'.
 from app.functions.function import Funcion
@@ -19,18 +16,16 @@ import os
 # Indica retorno de múltiplos tipos de dados.
 from typing import Union
 
-# Banco de dados e os modelos.
-from app.models import db, Calouros, Voluntarios
-
-# Esquema de dados para Calouros.
-from app.schema import DadosSchema_Calouros
+# Importa funções de consulta e adição específicas do sistema.
+from app.quey.consultar import consulta_geral_Calouros, consulta_frequencia_Calouros, consulta_frequencia_Voluntarios, dicionario_resposta
+from app.quey.adicionar import add_Calouros, add_Volountarios
 
 # Cria uma instância de Blueprint para rotas chamada 'routes'.
 bp = Blueprint('routes', __name__)
 
 # Define uma data limite como '2024-04-19' e a data atual do sistema.
-data_limite = datetime.strptime('2024-04-19', '%Y-%m-%d')
-sua_data = datetime.strptime(str(date.today()), '%Y-%m-%d')
+data_limite: datetime = datetime.strptime('2024-04-19', '%Y-%m-%d')
+sua_data1: datetime = datetime.strptime(str(date.today()), '%Y-%m-%d')
 
 # Rota principal que carrega o template index.html.
 @bp.route('/')
@@ -56,45 +51,33 @@ def frequencia() -> jsonify:  # O '-> jsonify' indica o retorno como um JSON
         json: os dados do aluno ou voluntário registrados e o número total de registros para o email correspondente.
               Se ocorrer uma falha, retorna uma mensagem de erro.
     """
-    try:  # Inicia o bloco try para capturar exceções
+    try:
         if request.method == 'POST':
+            # Obtém dados JSON da requisição POST
             dados = request.get_json()
-            usuario_dia = Calouros.query.filter_by(
-                nome=unidecode(str(dados['student-name']).strip()),  # Tipo: str
-                email=dados['email'],  # Tipo: str
-                data=date.today()  # Tipo: datetime.date
-            ).first()
-            if (not usuario_dia) and (sua_data <= data_limite):
-                aluno = Calouros(
-                    nome=unidecode(str(dados['student-name']).strip()),  # Tipo: str
-                    email=dados['email'],  # Tipo: str
-                    data=date.today()  # Tipo: datetime.date
-                )
-                db.session.add(aluno)
-                db.session.commit()
-                dados_novos = {'student-name': dados['student-name'], 'email': dados['email'], 'count': int(
-                    Calouros.query.filter_by(email=dados['email']).count())}  # Tipos: str, str, int
-            elif sua_data <= data_limite:
-                voluntario = Voluntarios(
-                    nome=unidecode(str(dados['student-name']).strip()),  # Tipo: str
-                    email=dados['email'],  # Tipo: str
-                    data=date.today()  # Tipo: datetime.date
-                )
-                db.session.add(voluntario)
-                db.session.commit()
-                dados_novos = {'student-name': dados['student-name'], 'email': dados['email'], 'count': int(
-                    Voluntarios.query.filter_by(email=dados['email']).count())}  # Tipos: str, str, int
+            sua_data: str = str(date.today())
+            
+            # Consulta a frequência para o dia e email especificados
+            usuario_calouro = consulta_frequencia_Calouros(dados['student-name'], dados['email'], sua_data)
+            usuario_voluntario = consulta_frequencia_Voluntarios(dados['student-name'], dados['email'], sua_data)
+            
+            print(usuario_voluntario)
+            
+            # Adiciona registro de frequência baseado nas condições especificadas
+            if (not usuario_calouro) and sua_data1 <= data_limite:
+                dados_novos = add_Calouros(dados['student-name'], dados['email'])
+            elif (not usuario_voluntario):
+                dados_novos = add_Volountarios(dados['student-name'], dados['email'])
             else:
-                dados_novos = {'student-name': dados['student-name'], 'email': dados['email'], 'count': 0}  # Tipos: str, str, int
+                dados_novos = dicionario_resposta(dados['student-name'], dados['email'])
 
             return jsonify(dados_novos)
-    except Exception as e:  # Captura exceções caso ocorra alguma falha
-        erro = {'mensagem': 'Falha', 'erro': str(e)}
-        return jsonify(erro)
+    except:
+        return jsonify({'erro': 'Falha ao registrar a frequência'})
 
 # Rota para consultar os registros de frequência.
 @bp.route("/consulta", methods=['GET'])
-def consulta() -> str:  # O '-> str' indica o retorno de um string
+def consulta() -> str:  # O '-> str' indica o retorno de uma string
     """
     Consulta os registros de frequência dos alunos ou voluntários.
 
@@ -103,9 +86,7 @@ def consulta() -> str:  # O '-> str' indica o retorno de um string
     """
     global listaOrganizada  # Define a variável 'listaOrganizada' como global
 
-    consulta = Calouros.query.all()
-    dados = DadosSchema_Calouros(many=True)
-    print(dados.dumps(consulta, indent=2))
+    consulta = consulta_geral_Calouros()
     lista = []
     listaOrganizada = Funcion(lista).lista_organizada(consulta)
 
@@ -120,13 +101,13 @@ def download() -> Union[send_file, redirect]:  # O '-> Union[send_file, redirect
     Returns:
         file: O arquivo de frequência para download.
     """
-    try:  # Inicia o bloco try para capturar exceções
+    try:
         # Inicializa listas vazias para armazenar os dados dos registros de frequência.
-        id = []  # Lista para armazenar os IDs dos registros.
-        nome = []  # Lista para armazenar os nomes dos alunos/voluntários.
-        email = []  # Lista para armazenar os emails dos alunos/voluntários.
-        dias = []  # Lista para armazenar as datas dos registros.
-        horas = []  # Lista para armazenar as horas dos registros.
+        id: list = []  # Lista para armazenar os IDs dos registros.
+        nome: list = []  # Lista para armazenar os nomes dos alunos/voluntários.
+        email: list = []  # Lista para armazenar os emails dos alunos/voluntários.
+        dias: list = []  # Lista para armazenar as datas dos registros.
+        horas: list = []  # Lista para armazenar as horas dos registros.
 
         # Loop para iterar sobre os registros organizados e atribuir cada valor a sua respectiva lista.
         for item in listaOrganizada:
