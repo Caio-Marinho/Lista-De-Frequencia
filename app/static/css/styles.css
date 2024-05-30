@@ -1,0 +1,114 @@
+/* Arquivo: styles.css */
+
+/* Define os estilos para o elemento body */
+body {
+    font-family: Arial, sans-serif; /* Define a fonte do texto */
+    margin: 0; /* Remove a margem padrão */
+    padding: 0; /* Remove o preenchimento padrão */
+}
+
+/* Define os estilos para as imagens */
+img{
+    border-radius: 50%; /* Faz as imagens circulares */
+}
+
+/* Define os estilos para o contêiner principal */
+.container {
+    width: 80%; /* Define a largura do contêiner como 80% da largura do elemento pai */
+    margin: 0 auto; /* Centraliza o contêiner horizontalmente */
+    padding: 20px; /* Adiciona 20 pixels de preenchimento interno */
+    border: 1px solid #ccc; /* Adiciona uma borda cinza clara de 1 pixel */
+    border-radius: 5px; /* Arredonda os cantos da borda em 5 pixels */
+}
+
+/* Define os estilos para o elemento h1 */
+h1 {
+    text-align: center; /* Centraliza o texto */
+    margin-bottom: 20px; /* Adiciona 20 pixels de margem abaixo do elemento */
+}
+
+/* Define os estilos para os formulários */
+form {
+    margin-bottom: 20px; /* Adiciona 20 pixels de margem abaixo do formulário */
+}
+
+/* Define os estilos para os contêineres de entrada */
+.input-container {
+    position: relative; /* Define a posição como relativa para permitir o posicionamento absoluto dos elementos filhos */
+    margin-bottom: 15px; /* Adiciona 15 pixels de margem abaixo do contêiner */
+}
+
+/* Define os estilos para os campos de entrada de texto e email */
+input[type="text"],
+input[type="email"] {
+    width: 100%; /* Define a largura como 100% da largura do elemento pai */
+    padding: 10px; /* Adiciona 10 pixels de preenchimento interno */
+    box-sizing: border-box; /* Inclui o preenchimento e a borda na largura total do elemento */
+}
+
+/* Define os estilos para os rótulos dos campos de entrada */
+label{
+    position: absolute; /* Posiciona o rótulo absolutamente dentro do contêiner de entrada */
+    top: 50%; /* Posiciona o rótulo no meio verticalmente */
+    left: 10px; /* Posiciona o rótulo 10 pixels à direita da borda esquerda do contêiner */
+    transform: translateY(-50%); /* Desloca o rótulo verticalmente para centralizá-lo */
+    font-size: 16px; /* Define o tamanho da fonte como 16 pixels */
+    color: #666; /* Define a cor do texto como cinza escuro */
+    transition: all 0.3s ease; /* Adiciona uma transição suave a todas as propriedades ao longo de 0.3 segundos */
+    pointer-events: none; /* Impede que o rótulo receba eventos de clique e foco */
+}
+
+/* Define os estilos para os rótulos quando o campo de entrada correspondente está focado ou preenchido */
+input:focus + label,
+input:not(:placeholder-shown) + label {
+    top: 0; /* Move o rótulo para o topo do contêiner de entrada */
+    left: 10px; /* Mantém o rótulo 10 pixels à direita da borda esquerda do contêiner */
+    font-size: 12px; /* Reduz o tamanho da fonte para 12 pixels */
+    color: #007BFF; /* Muda a cor do texto para azul */
+    background-color: white; /* Define a cor de fundo como branco */
+    padding: 0 5px; /* Adiciona 5 pixels de preenchimento horizontal */
+}
+
+/* Define os estilos para os botões */
+button {
+    padding: 10px 20px; /* Adiciona 10 pixels de preenchimento vertical e 20 pixels de preenchimento horizontal */
+    background-color: #007BFF; /* Define a cor de fundo como azul */
+    color: #fff; /* Define a cor do texto como branco */
+    border: none; /* Remove a borda */
+    border-radius: 5px; /* Arredonda os cantos da borda em 5 pixels */
+    cursor: pointer; /* Muda o cursor para um ponteiro quando o mouse passa sobre o botão */
+}
+
+/* Define os estilos para os botões quando o mouse passa sobre eles */
+button:hover {
+    background-color: #0056b3; /* Escurece a cor de fundo do botão */
+}
+
+/* Define os estilos para as tabelas */
+table {
+    width: 100%; /* Define a largura da tabela como 100% da largura do elemento pai */
+    border-collapse: collapse; /* Remove o espaçamento entre as células da tabela */
+}
+
+/* Define os estilos para os cabeçalhos e células da tabela */
+th, td {
+    padding: 10px; /* Adiciona 10 pixels de preenchimento interno */
+    border: 1px solid #ccc; /* Adiciona uma borda cinza clara de 1 pixel */
+    text-align: left; /* Alinha o texto à esquerda */
+}
+
+/* Define os estilos para o contêiner de botões */
+.Botoes{
+    display:inline-block; /* Exibe os botões em linha */
+    position:sticky; /* Faz os botões aderirem a uma posição na tela */
+    bottom:10px; /* Posiciona os botões 10 pixels acima da borda inferior da janela */
+    left: 30%; /* Posiciona os botões 30% à direita da borda esquerda da janela */
+    justify-content: center; /* Centraliza os botões horizontalmente */
+}
+
+/* Define os estilos para os botões individuais */
+.bot{
+    position: relative; /* Define a posição como relativa para permitir o posicionamento */
+    bottom: 10px; /* Posiciona o botão 10 pixels abaixo de sua posição normal */
+    margin: 10px 10px 10px 10px; /* Adiciona 10 pixels de margem em todos os lados do botão */
+}

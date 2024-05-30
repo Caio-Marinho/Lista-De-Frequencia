@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<!-- Início do cabeçalho do documento -->
+<head>
+    <!-- Definindo a codificação do documento para UTF-8, que suporta todos os caracteres possíveis -->
+    <meta charset="UTF-8">
+    <!-- Definindo a compatibilidade do navegador, o valor "IE=edge" é usado para garantir que o IE renderize a página no modo de maior compatibilidade -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Definindo a viewport do documento para controlar o layout em navegadores de dispositivos móveis. width=device-width define a largura da viewport para a largura do dispositivo e initial-scale=1 define o nível de zoom inicial quando a página é carregada pelo navegador -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Importando a biblioteca jQuery, uma biblioteca JavaScript rápida, pequena e rica em recursos -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Definindo o título do documento que aparece na barra de título do navegador ou na guia da página -->
+    <title>Registro de Frequência</title>
+    <!-- Definindo o ícone do documento que aparece na guia do navegador -->
+    <link rel="icon" type="image/x-icon" href="../static/img/Frequencia.png">
+    <!-- Importando o arquivo de estilos CSS externo que define o estilo da página -->
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<!-- Fim do cabeçalho do documento -->
+
+<!-- Início do corpo do documento -->
+<body>
+    <div class="container">
+        <div class="Botoes">
+            <!-- Título da página -->
+            <h1>Registro de Frequência</h1>
+            <!-- Botão para baixar a tabela de frequência em formato XLS -->
+            <button class='bot' id="download-btn-xls">Baixar XLS</button>
+            <!-- Botão para baixar a tabela de frequência em formato XLSX -->
+            <button class='bot' id="download-btn-xlsx">Baixar XLSX</button>
+            <!-- Botão para baixar a tabela de frequência em formato CSV -->
+            <button class='bot' id="download-btn-csv">Baixar CSV</button>
+            <!-- Botão para imprimir a página -->
+            <button class='bot' onclick="window.print()">Imprimir</button>
+        </div>
+
+        <!-- Tabela para exibir o registro de frequência dos alunos -->
+        <table id="attendance-table">
+            <thead>
+                <tr>
+                    <!-- Cabeçalhos da tabela -->
+                    <th>ID</th>
+                    <th>Nome Completo</th>
+                    <th>E-mail</th>
+                    <th>Dias Comparecidos</th>
+                    <th>Horas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop para inserir os registros de frequência dos alunos na tabela -->
+                {% for Pessoa in consulta %}
+                <tr>
+                        <!-- Inserindo os dados de cada aluno na tabela -->
+                        <td>{{Pessoa[0]}}</td>
+                        <td>{{Pessoa[1]}}</td>
+                        <td>{{Pessoa[2]}}</td>
+                        <td>{{Pessoa[3]}}</td>
+                        <td>{{Pessoa[4]}}</td>
+                </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Importando o arquivo de scripts JavaScript externo que define o comportamento da página -->
+    <script src="../static/js/download.js"></script>
+</body>
+<!-- Fim do corpo do documento -->
+
+</html>

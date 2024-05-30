@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<!-- Início do cabeçalho do documento -->
+<head>
+    <!-- Definindo a codificação do documento para UTF-8, que suporta todos os caracteres possíveis -->
+    <meta charset="UTF-8">
+    <!-- Definindo a compatibilidade do navegador, o valor "IE=edge" é usado para garantir que o IE renderize a página no modo de maior compatibilidade -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Definindo a viewport do documento para controlar o layout em navegadores de dispositivos móveis. width=device-width define a largura da viewport para a largura do dispositivo e initial-scale=1 define o nível de zoom inicial quando a página é carregada pelo navegador -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Importando a biblioteca jQuery, uma biblioteca JavaScript rápida, pequena e rica em recursos -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Definindo o título do documento que aparece na barra de título do navegador ou na guia da página -->
+    <title>Registro de Frequência</title>
+    <!-- Definindo o ícone do documento que aparece na guia do navegador -->
+    <link rel="icon" type="image/x-icon" href="../static/img/Frequencia.png">
+    <!-- Importando o arquivo de estilos CSS externo que define o estilo da página -->
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<!-- Fim do cabeçalho do documento -->
+
+<!-- Início do corpo do documento -->
+<body>
+    <div class="container">
+        <!-- Título da página -->
+        <h1>Registro de Frequência</h1>
+
+        <!-- Formulário para registro de frequência com campos de entrada animados -->
+        <form id="attendance-form">
+            <div class="form-group">
+                <div class="input-container">
+                    <!-- Campo de entrada para o nome completo do aluno -->
+                    <input type="text" id="student-name" name="student-name" placeholder="" required>
+                    <label for="student-name">Nome Completo</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-container">
+                    <!-- Campo de entrada para o e-mail institucional do aluno -->
+                    <input type="email" id="email" name="email" placeholder="" required>
+                    <label for="email">E-mail Institucional</label>
+                </div>
+            </div>
+            <!-- Botão para registrar a presença do aluno -->
+            <button type="submit">Registrar Presença</button>
+        </form>
+
+        <!-- Tabela para exibir o registro de frequência dos alunos -->
+        <table id="attendance-table">
+            <thead>
+                <tr>
+                    <!-- Cabeçalhos da tabela -->
+                    <th>Nome do Aluno</th>
+                    <th>E-mail</th>
+                    <th>Contagem de dias</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Os registros de frequência dos alunos serão inseridos aqui dinamicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Importando o arquivo de scripts JavaScript externo que define o comportamento da página -->
+    <script src="../static/js/script.js"></script>
+</body>
+<!-- Fim do corpo do documento -->
+
+</html>
