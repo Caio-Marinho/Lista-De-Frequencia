@@ -19,7 +19,7 @@ git clone https://github.com/Caio-Marinho/Lista-De-Frequencia.git
 Em seguida acesse o repositório e Crie o Ambiente Virtual.
 
 ```
-python -m venv ven
+python -m venv venv
 ```
 Inicie o Ambiente Virtual.
 ```
