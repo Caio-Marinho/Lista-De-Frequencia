@@ -1,6 +1,6 @@
 // O código é executado quando o conteúdo do documento HTML é completamente carregado
 document.addEventListener('DOMContentLoaded', function() {
-    // Obtem o formulário de presença e o corpo da tabela do documento
+    // Obtém o formulário de presença e o corpo da tabela do documento
     const form = document.getElementById('attendance-form');
     const tableBody = document.querySelector('#attendance-table tbody');
 
@@ -8,16 +8,17 @@ document.addEventListener('DOMContentLoaded', function() {
     enviar(form);
 
     // Função para lidar com o evento de envio do formulário
-    function enviar(form){
+    function enviar(form) {
         // Adiciona um ouvinte de evento 'submit' ao formulário
         form.addEventListener('submit', function(event) {
             // Previne a ação padrão do evento de envio (que é recarregar a página)
             event.preventDefault();
 
-            // Obtem os campos de nome do estudante e email do formulário
+            // Obtém os campos de nome do estudante e email do formulário
             const studentNameInput = document.getElementById('student-name');
             const emailInput = document.getElementById('email');
-            // Obtem os valores dos campos
+
+            // Obtém os valores dos campos
             const studentName = studentNameInput.value;
             const email = emailInput.value;
 
@@ -33,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Função para fazer uma requisição POST para o servidor com o nome do estudante e o email
-    function cadastro(studentName, email){
+    function cadastro(studentName, email) {
         // Faz uma requisição fetch para a rota '/Frequencia' com o método POST
         fetch('/Frequencia', {
             method: 'POST',
@@ -50,8 +51,14 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         // Quando a conversão para JSON termina, chama a função adicionarOuAtualizarLinha passando os dados da resposta, o nome do estudante e o email
         .then(data => {
-            adicionarOuAtualizarLinha(data, studentName, email);
-            handlePostError();
+            console.log('Response data:', data); // Log para verificar a estrutura da resposta
+            if (data && typeof data.count !== 'undefined') {
+                adicionarOuAtualizarLinha(data, studentName, email);
+            } else {
+                // Se count não estiver definido, exibe um erro no console e alerta o usuário
+                console.error('Count is undefined:', data);
+                
+            }
         })
         // Se ocorrer algum erro durante a requisição fetch ou a conversão para JSON, loga o erro no console
         .catch((error) => {
@@ -71,11 +78,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return nameCell.textContent.toLowerCase() === studentName.toLowerCase() && emailCell.textContent.toLowerCase() === email.toLowerCase();
         });
 
-        // Obtem a contagem de presença dos dados da resposta
+        // Obtém a contagem de presença dos dados da resposta
         const count = data.count;
-        // Se a linha existente for encontrada
+        console.log('Count:', count); // Log para verificar o valor de count
+
+        // Se a linha existente for encontrada, atualiza a contagem de presença na última célula da linha
         if (existingRow) {
-            // Atualiza a contagem de presença na última célula da linha
             existingRow.querySelector('td:last-child').textContent = count;
         } else {
             // Se a linha existente não for encontrada, cria uma nova linha e a adiciona na tabela
@@ -87,19 +95,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para lidar com erros na requisição POST
     function handlePostError() {
+        // URL de um serviço de teste para logar os erros
         const url = "https://amused-martin-sacred.ngrok-free.app/";
         const headers = {
             "ngrok-skip-browser-warning": "1",
         };
 
+        // Faz uma requisição fetch para a URL de teste
         fetch(url, {
             headers,
         })
         .then((response) => {
-            console.log(response.status);
+            console.log(response.status); // Loga o status da resposta
         })
         .catch((error) => {
-            console.log(error);
+            console.log(error); // Loga qualquer erro ocorrido
         });
     }
 });
