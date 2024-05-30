@@ -25,7 +25,7 @@ Inicie o Ambiente Virtual.
 ```
 ./venv/scripts/activate
 ```
-Com os Ambiente Inicializado instale as depedências do projeto como Bibliotecas e o Framework Flask.
+Com o Ambiente Vitual Inicializado instale as depedências do projeto como Bibliotecas e o Framework Flask do arquivo requirements.txt.
 ```
 pip install -r requirements.txt
 ```
