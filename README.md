@@ -1,9 +1,9 @@
 # Lista De Frequencia
 
-    Projeto Desenvolvido para o
-    Recebido dos Calouros de Gestão da Informação na Universidade Federal de Pernambuco
-    tendo o intuito de Registrar frequecia desses discentes(estudantes) 
-    para gerar futuramente certificados de participação 
+Projeto Desenvolvido para o
+Recebido dos Calouros de Gestão da Informação na Universidade Federal de Pernambuco
+tendo o intuito de Registrar frequecia desses discentes(estudantes) 
+para gerar futuramente certificados de participação 
 
 ## Instalação
 
