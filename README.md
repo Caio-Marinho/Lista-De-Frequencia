@@ -11,18 +11,18 @@
     Para Visualização do Projeto, primeiro clone ele em seu ambiente local
 
 ```bash
-        git clone https://github.com/Caio-Marinho/Lista-De-Frequencia.git
+git clone https://github.com/Caio-Marinho/Lista-De-Frequencia.git
 ```
 
     Em seguida acesse o repositório e Crie o Ambiente Virtual
 
-    ```
-        python -m venv ven
-    ```
+```
+python -m venv ven
+```
     Inicie o Ambiente
-    ```
-        ./venv/scripts/activate
-    ```
+```
+./venv/scripts/activate
+```
     Com os Ambiente Inicializado instale as depedências do projeto como Bibliotecas e o Framework Flask.
     ```
        pip install -r requirements.txt
