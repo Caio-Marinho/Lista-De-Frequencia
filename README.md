@@ -13,7 +13,7 @@ para gerar futuramente certificados de participação
 ## Back end
 ![PYTHON](https://img.shields.io/badge/-PYTHON-black?logo=python&style=social)
 ![FLASK](https://img.shields.io/badge/-FLASK-black?logo=flask&style=social)
-![MYSQL](https://img.shields.io/badge/-MYSQL-black?logo=mysql&style=for-the-badge)
+![MYSQL](https://img.shields.io/badge/-MYSQL-black?logo=mysql&style=plastic)
 
 ## Instalação
 
