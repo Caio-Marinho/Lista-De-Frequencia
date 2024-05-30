@@ -19,23 +19,23 @@ Em seguida acesse o repositório e Crie o Ambiente Virtual
 ```
 python -m venv ven
 ```
-    Inicie o Ambiente
+Inicie o Ambiente
 ```
 ./venv/scripts/activate
 ```
-    Com os Ambiente Inicializado instale as depedências do projeto como Bibliotecas e o Framework Flask.
-    ```
-       pip install -r requirements.txt
-    ```
-    Uma vez Instalado você pode iniciar o Projeto
+Com os Ambiente Inicializado instale as depedências do projeto como Bibliotecas e o Framework Flask.
+```
+pip install -r requirements.txt
+```
+Uma vez Instalado você pode iniciar o Projeto
     
-    ```
-        flask run (desenvolvimento)
-        ou
-        python.exe run.py (Produção)
-    ```
+```
+flask run (desenvolvimento)
+ou
+python.exe run.py (Produção)
+```
     
 ## Autor
 
-    - [@Caio-Marinho](https://github.com/Caio-Marinho)
+- [@Caio-Marinho](https://github.com/Caio-Marinho)
 
