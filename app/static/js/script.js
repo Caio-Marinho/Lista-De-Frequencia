@@ -18,47 +18,44 @@ document.addEventListener('DOMContentLoaded', function() {
             const studentNameInput = document.getElementById('student-name');
             const emailInput = document.getElementById('email');
 
+            // Obtém o valor do botão de opção selecionado
+            const tipoEstudante = document.querySelector('input[name="tipo"]:checked').value;
+
             // Obtém os valores dos campos
             const studentName = studentNameInput.value;
             const email = emailInput.value;
 
-            // Verifica se o nome do estudante e o email foram preenchidos e se o email termina com '@ufpe.br'
-            if (studentName && email && email.endsWith('@ufpe.br')) {
-                // Se sim, chama a função cadastro passando o nome do estudante e o email
-                cadastro(studentName, email);
+            // Verifica se o nome do estudante e o email foram preenchidos
+            if (studentName && email) {
+                // Se sim, chama a função cadastro passando o nome do estudante, o email e o tipo de estudante
+                cadastro(studentName, email, tipoEstudante);
             } else {
-                // Se não, exibe um alerta pedindo para o usuário informar o email institucional
-                alert("Por Favor Informe seu E-mail Institucional");
+                // Se não, exibe um alerta pedindo para o usuário preencher todos os campos
+                alert("Por favor, preencha todos os campos.");
             }
         });
     }
 
-    // Função para fazer uma requisição POST para o servidor com o nome do estudante e o email
-    function cadastro(studentName, email) {
+    // Função para fazer uma requisição POST para o servidor com o nome do estudante, o email e o tipo de estudante
+    function cadastro(studentName, email, tipoEstudante) {
         // Faz uma requisição fetch para a rota '/Frequencia' com o método POST
         fetch('/Frequencia', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            // Converte o objeto com o nome do estudante e o email para uma string JSON e a envia no corpo da requisição
+            // Converte o objeto com o nome do estudante, o email e o tipo de estudante para uma string JSON e a envia no corpo da requisição
             body: JSON.stringify({
                 'student-name': studentName,
                 'email': email,
+                'tipo': tipoEstudante
             }),
         })
         // Quando a resposta da requisição chega, a converte para JSON
         .then(response => response.json())
         // Quando a conversão para JSON termina, chama a função adicionarOuAtualizarLinha passando os dados da resposta, o nome do estudante e o email
         .then(data => {
-            console.log('Response data:', data); // Log para verificar a estrutura da resposta
-            if (data && typeof data.count !== 'undefined') {
-                adicionarOuAtualizarLinha(data, studentName, email);
-            } else {
-                // Se count não estiver definido, exibe um erro no console e alerta o usuário
-                console.error('Count is undefined:', data);
-                
-            }
+            verificar_undefined(data,studentName,email);
         })
         // Se ocorrer algum erro durante a requisição fetch ou a conversão para JSON, loga o erro no console
         .catch((error) => {
@@ -69,6 +66,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reseta o formulário (limpa os campos)
         form.reset();
     }
+
+    function verificar_undefined(data,studentName,email){
+        console.log('Response data:', data); // Log para verificar a estrutura da resposta
+            if (data && typeof data.count !== 'undefined') {
+                adicionarOuAtualizarLinha(data, studentName, email);
+            } else {
+                // Se count não estiver definido, exibe um erro no console e alerta o usuário
+                console.error('Count is undefined:', data);
+                
+            }
+    };
 
     // Função para adicionar uma nova linha na tabela ou atualizar uma linha existente
     function adicionarOuAtualizarLinha(data, studentName, email) {
