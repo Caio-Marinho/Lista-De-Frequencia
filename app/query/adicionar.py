@@ -7,54 +7,90 @@ from unidecode import unidecode
 # Importa a classe date para manipulação de datas.
 from datetime import date
 
-def add_Calouros(Nome: str, email: str) -> dict:
+class Adicionar_Frequencia:
     """
-    Adiciona um novo registro de calouro ao banco de dados.
-
-    Args:
-        Nome (str): O nome do calouro.
-        email (str): O email do calouro.
-
-    Returns:
-        dict: Um dicionário contendo o nome do calouro, email e a contagem de registros associados ao email.
+    Classe base para gerenciar frequências, contendo métodos e atributos comuns.
     """
-    # Cria uma nova instância de Calouros com os dados fornecidos.
-    calouro = Calouros(
-        nome=unidecode(str(Nome).strip()),  # Remove acentos e espaços extras do nome.
-        email=email,  # Atribui o email fornecido.
-        data=date.today()  # Define a data atual como data de registro.
-    )
-    
-    # Adiciona o novo calouro à sessão do banco de dados.
-    db.session.add(calouro)
-    # Confirma a transação para salvar o registro no banco de dados.
-    db.session.commit()
-    
-    # Retorna um dicionário com os dados do calouro e a contagem de registros para o email.
-    return {'student-name': Nome, 'email': email, 'count': int(Calouros.query.filter_by(email=email).count())}
+    def __init__(self, nome: str, email: str):
+        """
+        Inicializa um novo gerenciador de frequência com o nome e email fornecidos.
+        
+        Args:
+            nome (str): O nome da pessoa.
+            email (str): O email da pessoa.
+        """
+        self.__nome = unidecode(nome.strip())  # Remove acentos e espaços extras do nome.
+        self.__email = email
 
-def add_Volountarios(Nome: str, email: str) -> dict:
+    def get_nome(self) -> str:
+        """Retorna o nome."""
+        return self.__nome
+
+    def get_email(self) -> str:
+        """Retorna o email."""
+        return self.__email
+
+    def adicionar(self) -> dict:
+        """
+        Adiciona um registro de frequência. Deve ser implementado pelas subclasses.
+        
+        Returns:
+            dict: Um dicionário contendo o nome da pessoa, email e a contagem de registros associados ao email.
+        """
+        raise NotImplementedError("Este método deve ser implementado pelas subclasses.")
+
+class Adicionar_Calouro(Adicionar_Frequencia):
     """
-    Adiciona um novo registro de voluntário ao banco de dados.
-
-    Args:
-        Nome (str): O nome do voluntário.
-        email (str): O email do voluntário.
-
-    Returns:
-        dict: Um dicionário contendo o nome do voluntário, email e a contagem de registros associados ao email.
+    Classe para gerenciar registros de calouros.
     """
-    # Cria uma nova instância de Voluntarios com os dados fornecidos.
-    voluntario = Voluntarios(
-        nome=unidecode(str(Nome).strip()),  # Remove acentos e espaços extras do nome.
-        email=email,  # Atribui o email fornecido.
-        data=date.today()  # Define a data atual como data de registro.
-    )
-    
-    # Adiciona o novo voluntário à sessão do banco de dados.
-    db.session.add(voluntario)
-    # Confirma a transação para salvar o registro no banco de dados.
-    db.session.commit()
-    
-    # Retorna um dicionário com os dados do voluntário e a contagem de registros para o email.
-    return {'student-name': Nome, 'email': email, 'count': int(Voluntarios.query.filter_by(email=email).count())}
+    def adicionar(self) -> dict:
+        """
+        Adiciona um novo registro de calouro ao banco de dados.
+        
+        Returns:
+            dict: Um dicionário contendo o nome do calouro, email e a contagem de registros associados ao email.
+        """
+        # Cria uma nova instância de Calouros com os dados fornecidos.
+        calouro = Calouros(
+            nome=self.get_nome(),
+            email=self.get_email(),
+            data=date.today()  # Define a data atual como data de registro.
+        )
+        # Adiciona o novo calouro à sessão do banco de dados.
+        db.session.add(calouro)
+        # Confirma a transação para salvar o registro no banco de dados.
+        db.session.commit()
+        # Retorna um dicionário com os dados do calouro e a contagem de registros para o email.
+        return {
+            'student-name': self.get_nome(),
+            'email': self.get_email(),
+            'count': int(Calouros.query.filter_by(email=self.get_email()).count())
+        }
+
+class Adicionar_Voluntario(Adicionar_Frequencia):
+    """
+    Classe para gerenciar registros de voluntários.
+    """
+    def adicionar(self) -> dict:
+        """
+        Adiciona um novo registro de voluntário ao banco de dados.
+        
+        Returns:
+            dict: Um dicionário contendo o nome do voluntário, email e a contagem de registros associados ao email.
+        """
+        # Cria uma nova instância de Voluntarios com os dados fornecidos.
+        voluntario = Voluntarios(
+            nome=self.get_nome(),
+            email=self.get_email(),
+            data=date.today()  # Define a data atual como data de registro.
+        )
+        # Adiciona o novo voluntário à sessão do banco de dados.
+        db.session.add(voluntario)
+        # Confirma a transação para salvar o registro no banco de dados.
+        db.session.commit()
+        # Retorna um dicionário com os dados do voluntário e a contagem de registros para o email.
+        return {
+            'student-name': self.get_nome(),
+            'email': self.get_email(),
+            'count': int(Voluntarios.query.filter_by(email=self.get_email()).count())
+        }

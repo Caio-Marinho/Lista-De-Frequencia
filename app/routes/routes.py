@@ -17,8 +17,8 @@ import os
 from typing import Union
 
 # Importa funções de consulta e adição específicas do sistema.
-from app.query.consultar import consulta_geral_Calouros, consulta_frequencia_Calouros, consulta_frequencia_Voluntarios, dicionario_resposta
-from app.query.adicionar import add_Calouros, add_Volountarios
+from app.query.consultar import Voluntario,Calouro,Frequencia
+from app.query.adicionar import Adicionar_Calouro,Adicionar_Voluntario
 
 # Cria uma instância de Blueprint para rotas chamada 'routes'.
 bp = Blueprint('routes', __name__)
@@ -51,29 +51,35 @@ def frequencia() -> jsonify:  # O '-> jsonify' indica o retorno como um JSON
         json: os dados do aluno ou voluntário registrados e o número total de registros para o email correspondente.
               Se ocorrer uma falha, retorna uma mensagem de erro.
     """
-    try:
-        if request.method == 'POST':
-            # Obtém dados JSON da requisição POST
-            dados = request.get_json()
-            sua_data: str = str(date.today())
-            
-            # Consulta a frequência para o dia e email especificados
-            usuario_calouro = consulta_frequencia_Calouros(dados['student-name'], dados['email'], sua_data)
-            usuario_voluntario = consulta_frequencia_Voluntarios(dados['student-name'], dados['email'], sua_data)
-            
-            print(usuario_voluntario)
-            
-            # Adiciona registro de frequência baseado nas condições especificadas
-            if (not usuario_calouro) :
-                dados_novos = add_Calouros(dados['student-name'], dados['email'])
-            elif (not usuario_voluntario) and (sua_data1 <= data_limite):
-                dados_novos = add_Volountarios(dados['student-name'], dados['email'])
-            else:
-                dados_novos = dicionario_resposta(dados['student-name'], dados['email'])
+    if request.method == 'POST':
+        # Obtém dados JSON da requisição POST
+        global dados
+        global frequencia
+        dados = request.get_json()
+        sua_data: str = str(date.today())
+        print(dados)
+        frequencia = Frequencia(dados['student-name'], dados['email'], sua_data)
+        
+        print((dados['tipo']))
+        calouro = Calouro(dados['student-name'], dados['email'], sua_data)
+        voluntario = Voluntario(dados['student-name'], dados['email'], sua_data)
+        # Consulta a frequência para o dia e email especificados
+        usuario_calouro = calouro.consulta_frequencia()
+        usuario_voluntario = voluntario.consulta_frequencia()
+        
+        print(usuario_voluntario)
+        
+        # Adiciona registro de frequência baseado nas condições especificadas
+        if (not usuario_calouro) and (dados['tipo'] == 'Calouro')  :
+            adicionarCalouro = Adicionar_Calouro(dados['student-name'], dados['email'])
+            dados_novos = adicionarCalouro.adicionar()
+        elif (not usuario_voluntario) and (dados['tipo'] == 'Voluntario'):
+            adicionarVoluntario = Adicionar_Voluntario(dados['student-name'], dados['email'])
+            dados_novos = adicionarVoluntario.adicionar()
+        else:
+            dados_novos = frequencia.dicionario_resposta(entidade=dados['tipo'])
 
-            return jsonify(dados_novos)
-    except:
-        return jsonify({'erro': 'Falha ao registrar a frequência'})
+        return jsonify(dados_novos)
 
 # Rota para consultar os registros de frequência.
 @bp.route("/consulta", methods=['GET'])
@@ -86,7 +92,7 @@ def consulta() -> str:  # O '-> str' indica o retorno de uma string
     """
     global listaOrganizada  # Define a variável 'listaOrganizada' como global
 
-    consulta = consulta_geral_Calouros()
+    consulta = frequencia.consulta_geral(entidade=dados['tipo'])
     lista = []
     listaOrganizada = Funcion(lista).lista_organizada(consulta)
 
