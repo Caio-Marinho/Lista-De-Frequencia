@@ -41,7 +41,7 @@ class Funcion:
 
         # Inicializa uma lista para armazenar os dados tratados formando um Matriz
         Matriz: List[List[Union[int, str]]] = []
-        if entidade == 'Calouro':
+        if entidade in ('Calouro','Calouros','calouro','calouros'):
             # Cria uma variável para a consulta Calouros
             base = Calouros.query
         else:

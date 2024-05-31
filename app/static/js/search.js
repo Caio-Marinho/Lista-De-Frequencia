@@ -16,6 +16,14 @@ document.addEventListener('DOMContentLoaded', function() {
         atualizarTabela();
     });
 
+    // Adiciona ouvintes de evento para os botões de rádio
+    radiosEntidade.forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            atualizarTabela();
+            navegarComParametros();
+        });
+    });
+
     function atualizarTabela() {
         var termoBusca = inputBusca.value.trim(); // Obtém o termo de busca, removendo espaços em branco
         var entidadeSelecionada = '';
@@ -74,6 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
         urlBusca += 'entidade=' + encodeURIComponent(entidadeSelecionada);
 
         // Redireciona para a página de consulta com os parâmetros na barra de endereço
-        window.location.href = urlBusca;
+        window.history.replaceState(null, '', urlBusca);
     }
 });
