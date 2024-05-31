@@ -91,12 +91,11 @@ def consulta(entidade='Calouro',nome=None) -> str:  # O '-> str' indica o retorn
         str: O conteúdo renderizado do template Consulta.html contendo os registros de frequência.
     """
     global listaOrganizada  # Define a variável 'listaOrganizada' como global
-    
+    print(entidade)
     consulta = Frequencia.consulta_geral(entidade=entidade)
     lista = []
-    print(nome)
-    listaOrganizada = Funcion(lista).lista_organizada(consulta)
-    listaFiltrada = [sublista for sublista in listaOrganizada if any(str(nome) in texto.lower() for texto in sublista)]
+    listaOrganizada = Funcion(lista).lista_organizada(entidade,consulta)
+    listaFiltrada = [sublista for sublista in listaOrganizada if any(str(nome).lower() in texto.lower() for texto in sublista)]
     listaExibida =listaFiltrada if listaFiltrada else listaOrganizada
     return render_template('Consulta.html', consulta=listaExibida)
 
