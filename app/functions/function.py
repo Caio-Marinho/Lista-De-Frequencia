@@ -1,4 +1,4 @@
-from app.models import Calouros  # Importa o modelo Calouros do módulo models do pacote atual
+from app.models import Calouros,Voluntarios  # Importa o modelo Calouros do módulo models do pacote atual
 from typing import Union, List # Importa o tipo de dados Union do módulo typing para indicar que uma função pode retornar mais de um tipo de dado.
 
 
@@ -18,7 +18,7 @@ class Funcion:
         self.lista = lista
 
     # noinspection PyTypeChecker
-    def lista_organizada(self, consulta: List[Calouros]) -> List[List[Union[int, str]]]:
+    def lista_organizada(self,entidade:str,consulta: List[Calouros]) -> List[List[Union[int, str]]]:
         # O ': List[Calouros]' após 'consulta' indica que 'consulta' deve ser uma Lista de objetos Calouros consultados.
         # O '→ List[List[Union[int, str]]]' indica que esta função retorna uma Matriz.
         """
@@ -41,9 +41,11 @@ class Funcion:
 
         # Inicializa uma lista para armazenar os dados tratados formando um Matriz
         Matriz: List[List[Union[int, str]]] = []
-
-        # Cria uma variável para a consulta Calouros
-        calouros = Calouros.query
+        if entidade == 'Calouro':
+            # Cria uma variável para a consulta Calouros
+            base = Calouros.query
+        else:
+            base = Voluntarios.query
 
         # Processa cada item da lista
         for item in self.lista:
@@ -51,7 +53,7 @@ class Funcion:
             item = list(item)
 
             # Consulta o banco de dados para obter a contagem de dias para cada email
-            dias = calouros.filter_by(email=item[1]).count()
+            dias = base.filter_by(email=item[1]).count()
 
             # Adiciona o número de dias e horas à lista tratada unindo a lista item com a lista passada onde a lista
             # passada entra no final da lista item extend - lista 1 [1,2,3] + lista2 [4,5,6] = lista1.extend(lista2)
