@@ -1,5 +1,5 @@
 # Importa componentes do micro framework Flask que serve para criar aplicações web
-from flask import Blueprint, request, render_template, jsonify, send_file, redirect, url_for
+from flask import Blueprint, request, render_template, jsonify, send_file, redirect, url_for,render_template_string
 
 # Importa date e datetime para manipulação de datas.
 from datetime import date, datetime
@@ -53,12 +53,10 @@ def frequencia() -> jsonify:  # O '-> jsonify' indica o retorno como um JSON
     """
     if request.method == 'POST':
         # Obtém dados JSON da requisição POST
-        global dados
-        global frequencia
         dados = request.get_json()
         sua_data: str = str(date.today())
         print(dados)
-        frequencia = Frequencia(dados['student-name'], dados['email'], sua_data)
+        Presencas = Frequencia(dados['student-name'], dados['email'], sua_data)
         
         print((dados['tipo']))
         calouro = Calouro(dados['student-name'], dados['email'], sua_data)
@@ -77,13 +75,15 @@ def frequencia() -> jsonify:  # O '-> jsonify' indica o retorno como um JSON
             adicionarVoluntario = Adicionar_Voluntario(dados['student-name'], dados['email'])
             dados_novos = adicionarVoluntario.adicionar()
         else:
-            dados_novos = frequencia.dicionario_resposta(entidade=dados['tipo'])
+            dados_novos = Presencas.dicionario_resposta(entidade=dados['tipo'])
 
         return jsonify(dados_novos)
 
 # Rota para consultar os registros de frequência.
-@bp.route("/consulta", methods=['GET'])
-def consulta() -> str:  # O '-> str' indica o retorno de uma string
+@bp.route("/consulta", methods=['GET','POST'])
+@bp.route("/consulta/entidade=<entidade>", methods=['GET','POST'])
+@bp.route("/consulta/nome=<nome>&entidade=<entidade>", methods=['GET','POST'])
+def consulta(entidade='Calouro',nome=None) -> str:  # O '-> str' indica o retorno de uma string
     """
     Consulta os registros de frequência dos alunos ou voluntários.
 
@@ -91,12 +91,14 @@ def consulta() -> str:  # O '-> str' indica o retorno de uma string
         str: O conteúdo renderizado do template Consulta.html contendo os registros de frequência.
     """
     global listaOrganizada  # Define a variável 'listaOrganizada' como global
-
-    consulta = frequencia.consulta_geral(entidade=dados['tipo'])
+    
+    consulta = Frequencia.consulta_geral(entidade=entidade)
     lista = []
+    print(nome)
     listaOrganizada = Funcion(lista).lista_organizada(consulta)
-
-    return render_template('Consulta.html', consulta=listaOrganizada)
+    listaFiltrada = [sublista for sublista in listaOrganizada if any(str(nome) in texto.lower() for texto in sublista)]
+    listaExibida =listaFiltrada if listaFiltrada else listaOrganizada
+    return render_template('Consulta.html', consulta=listaExibida)
 
 # Rota para baixar o arquivo de frequência.
 @bp.route('/download', methods=['GET'])

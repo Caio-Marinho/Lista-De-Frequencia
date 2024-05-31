@@ -45,7 +45,11 @@ input[type="email"] {
     padding: 10px; /* Adiciona 10 pixels de preenchimento interno */
     box-sizing: border-box; /* Inclui o preenchimento e a borda na largura total do elemento */
 }
-
+input[type="radio"]{
+    position: relative;
+    top: 2px;
+    left: 15px;
+}
 /* Define os estilos para os rótulos dos campos de entrada */
 label{
     position: absolute; /* Posiciona o rótulo absolutamente dentro do contêiner de entrada */
@@ -58,6 +62,26 @@ label{
     pointer-events: none; /* Impede que o rótulo receba eventos de clique e foco */
 }
 
+/* Move o rótulo do botão de opção 'Calouro' para a esquerda */
+label[for="calouro"] {
+    position: relative !important;
+    bottom: 10px !important;
+    right: 40px !important; /* Move o rótulo 20 pixels para a esquerda */
+}
+
+/* Move o rótulo do botão de opção 'Voluntario' para a direita */
+label[for="voluntario"] {
+    position: relative !important;
+    bottom: 10px !important;
+    right: 40px !important; /* Move o rótulo 20 pixels para a direita */
+}
+label[for="calouro"],label[for="voluntario"]{
+    color: gray !important;
+}
+label[for='search-input']{
+    position: absolute;
+    top: 20px;
+}
 /* Define os estilos para os rótulos quando o campo de entrada correspondente está focado ou preenchido */
 input:focus + label,
 input:not(:placeholder-shown) + label {
@@ -71,6 +95,7 @@ input:not(:placeholder-shown) + label {
 
 /* Define os estilos para os botões */
 button {
+    margin-top: 20px;
     padding: 10px 20px; /* Adiciona 10 pixels de preenchimento vertical e 20 pixels de preenchimento horizontal */
     background-color: #007BFF; /* Define a cor de fundo como azul */
     color: #fff; /* Define a cor do texto como branco */
@@ -109,6 +134,6 @@ th, td {
 /* Define os estilos para os botões individuais */
 .bot{
     position: relative; /* Define a posição como relativa para permitir o posicionamento */
-    bottom: 10px; /* Posiciona o botão 10 pixels abaixo de sua posição normal */
+    bottom: 5px; /* Posiciona o botão 10 pixels abaixo de sua posição normal */
     margin: 10px 10px 10px 10px; /* Adiciona 10 pixels de margem em todos os lados do botão */
 }

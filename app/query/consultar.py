@@ -1,26 +1,20 @@
-# Importa os modelos e a instância do banco de dados.
-from app.models import db, Calouros, Voluntarios
-
-# Remove acentos de strings.
 from unidecode import unidecode
+from app.schema.schema import DadosSchema_Calouros, DadosSchema_Voluntarios
+from app.models.models import Calouros, Voluntarios
 
-# Importa a classe date para manipulação de datas.
-from datetime import date
-
-class Adicionar_Frequencia:
-    """
-    Classe base para gerenciar frequências, contendo métodos e atributos comuns.
-    """
-    def __init__(self, nome: str, email: str):
+class Frequencia:
+    def __init__(self, nome:str, email:str, dia:str):
         """
-        Inicializa um novo gerenciador de frequência com o nome e email fornecidos.
-        
+        Inicializa um objeto Frequencia com os atributos nome, email e dia.
+
         Args:
             nome (str): O nome da pessoa.
-            email (str): O email da pessoa.
+            email (str): O endereço de e-mail da pessoa.
+            dia (str): A data no formato 'YYYY-MM-DD'.
         """
-        self.__nome = unidecode(nome.strip())  # Remove acentos e espaços extras do nome.
+        self.__nome = unidecode(nome).strip()  # Remove acentos e espaços extras do nome
         self.__email = email
+        self.__dia = dia
 
     def get_nome(self) -> str:
         """Retorna o nome."""
@@ -30,67 +24,73 @@ class Adicionar_Frequencia:
         """Retorna o email."""
         return self.__email
 
-    def adicionar(self) -> dict:
-        """
-        Adiciona um registro de frequência. Deve ser implementado pelas subclasses.
-        
-        Returns:
-            dict: Um dicionário contendo o nome da pessoa, email e a contagem de registros associados ao email.
-        """
-        raise NotImplementedError("Este método deve ser implementado pelas subclasses.")
+    def get_dia(self) -> str:
+        """Retorna o dia."""
+        return self.__dia
 
-class Adicionar_Calouro(Adicionar_Frequencia):
-    """
-    Classe para gerenciar registros de calouros.
-    """
-    def adicionar(self) -> dict:
+   
+    def consulta_geral(entidade:str='Calouro') -> list:
         """
-        Adiciona um novo registro de calouro ao banco de dados.
-        
+        Consulta todos os registros da entidade no banco de dados.
+
+        Args:
+            entidade (str): O nome da entidade ('Calouro' ou 'Voluntario').
+
         Returns:
-            dict: Um dicionário contendo o nome do calouro, email e a contagem de registros associados ao email.
+            list: Uma lista contendo todos os registros da entidade.
         """
-        # Cria uma nova instância de Calouros com os dados fornecidos.
-        calouro = Calouros(
+        # Verifica qual entidade está sendo consultada e realiza a consulta no banco de dados
+        if entidade in ('Calouro','calouro','Calouros','calouros'):
+            consulta = Calouros.query.all()
+        else:
+            consulta = Voluntarios.query.all()
+        return consulta
+
+    def dicionario_resposta(self, entidade='Calouro') -> dict:
+        """
+        Retorna um dicionário de resposta para a entidade correspondente.
+
+        Args:
+            entidade (str): O nome da entidade ('Calouro' ou 'Voluntario').
+
+        Returns:
+            dict: Um dicionário contendo informações sobre o número de registros associados ao email.
+        """
+        if entidade == 'Calouro':
+            return {
+                'student-name': self.__nome,
+                'email':self.__email,
+                'count': int(Calouros.query.filter_by(email=self.__email).count())
+            }
+        else:
+            return {
+                'student-name': self.__nome,
+                'email':self.__email,
+                'count': int(Voluntarios.query.filter_by(email=self.__email).count())
+            }
+
+class Calouro(Frequencia):
+    def consulta_frequencia(self) -> bool:
+        """Consulta a frequência do calouro."""
+        consulta = Calouros.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
-            data=date.today()  # Define a data atual como data de registro.
-        )
-        # Adiciona o novo calouro à sessão do banco de dados.
-        db.session.add(calouro)
-        # Confirma a transação para salvar o registro no banco de dados.
-        db.session.commit()
-        # Retorna um dicionário com os dados do calouro e a contagem de registros para o email.
-        return {
-            'student-name': self.get_nome(),
-            'email': self.get_email(),
-            'count': int(Calouros.query.filter_by(email=self.get_email()).count())
-        }
+            data=self.get_dia()
+        ).all()
+        dados = DadosSchema_Calouros(many=True).dumps(consulta, indent=2)
+        print(dados)
+        print(self.get_dia())
+        return self.get_dia() in dados
 
-class Adicionar_Voluntario(Adicionar_Frequencia):
-    """
-    Classe para gerenciar registros de voluntários.
-    """
-    def adicionar(self) -> dict:
-        """
-        Adiciona um novo registro de voluntário ao banco de dados.
-        
-        Returns:
-            dict: Um dicionário contendo o nome do voluntário, email e a contagem de registros associados ao email.
-        """
-        # Cria uma nova instância de Voluntarios com os dados fornecidos.
-        voluntario = Voluntarios(
+class Voluntario(Frequencia):
+    def consulta_frequencia(self) -> bool:
+        """Consulta a frequência do voluntário."""
+        consulta = Voluntarios.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
-            data=date.today()  # Define a data atual como data de registro.
-        )
-        # Adiciona o novo voluntário à sessão do banco de dados.
-        db.session.add(voluntario)
-        # Confirma a transação para salvar o registro no banco de dados.
-        db.session.commit()
-        # Retorna um dicionário com os dados do voluntário e a contagem de registros para o email.
-        return {
-            'student-name': self.get_nome(),
-            'email': self.get_email(),
-            'count': int(Voluntarios.query.filter_by(email=self.get_email()).count())
-        }
+            data=self.get_dia()
+        ).all()
+        dados = DadosSchema_Voluntarios(many=True).dumps(consulta, indent=2)
+        print(dados)
+        print(self.get_dia())
+        return self.get_dia() in dados

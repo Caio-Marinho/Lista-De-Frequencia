@@ -12,6 +12,7 @@ class DadosSchema_Calouros(ma.SQLAlchemySchema):
     id = ma.auto_field()  # Campo 'id' do modelo 'Calouros'.
     nome = ma.auto_field()   # Campo 'nome' do modelo 'Calouros'.
     email = ma.auto_field()  # Campo 'email' do modelo 'Calouros'.
+    data = ma.auto_field() # Campo 'data' do modelo 'Calouros'.
 
 class DadosSchema_Voluntarios(ma.SQLAlchemyAutoSchema):
     """

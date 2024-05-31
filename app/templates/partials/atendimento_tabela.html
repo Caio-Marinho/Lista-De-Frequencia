@@ -1,0 +1,14 @@
+<tbody id="attendance-table-body">
+    <!-- Loop para inserir os registros de frequência dos alunos na tabela -->
+    {% for Pessoa in consulta %}
+    <tr>
+            <!-- Inserindo os dados de cada aluno na tabela -->
+            <td>{{Pessoa[0]}}</td>
+            <td>{{Pessoa[1]}}</td>
+            <td>{{Pessoa[2]}}</td>
+            <td>{{Pessoa[3]}}</td>
+            <td>{{Pessoa[4]}}</td>
+    </tr>
+        {% endfor %}
+</tbody>
+<script src="../static/js/search.js"></script>
