@@ -136,13 +136,26 @@ function adicionarOuAtualizarLinha(data, studentName, email, tableBody) {
     } else {
         // Se a linha existente não for encontrada, cria uma nova linha e a adiciona na tabela
         const newRow = document.createElement('tr');
-        newRow.innerHTML = `<td>${studentName}</td><td>${email}</td><td>${count}</td>`;
+        
+        const nameCell = document.createElement('td');
+        nameCell.textContent = studentName;
+        newRow.appendChild(nameCell);
+        
+        const emailCell = document.createElement('td');
+        emailCell.textContent = email;
+        newRow.appendChild(emailCell);
+        
+        const countCell = document.createElement('td');
+        countCell.textContent = count;
+        newRow.appendChild(countCell);
+        
         tableBody.appendChild(newRow);
     }
 
     // Atualiza os dados salvos no localStorage
     atualizarLocalStorage(tableBody);
 }
+
 
 /**
  * Atualiza os dados de presença salvos no localStorage com os dados da tabela.
