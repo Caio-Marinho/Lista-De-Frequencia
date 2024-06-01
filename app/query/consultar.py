@@ -23,6 +23,14 @@ class Frequencia:
         self.__dia = dia
 
     # Métodos get para acessar os atributos privados nome, email e dia.
+    def get_nome(self):
+        return self.__nome
+    
+    def get_email(self):
+        return self.__email
+    
+    def get_dia(self):
+        return self.__dia
    
     def consulta_geral(entidade: str) -> list:
         """

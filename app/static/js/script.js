@@ -4,9 +4,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('attendance-form');
     const tableBody = document.querySelector('#attendance-table tbody');
 
+    // Carrega os dados salvos no localStorage e os exibe na tabela
+    carregarDados(tableBody);
+
     // Chama a função enviar passando o formulário como argumento
     enviar(form, tableBody);
 });
+
+/**
+ * Carrega os dados de presença salvos no localStorage e os exibe na tabela.
+ * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
+ */
+function carregarDados(tableBody) {
+    // Obtém os dados salvos no localStorage
+    const dadosSalvos = JSON.parse(localStorage.getItem('presenca')) || [];
+
+    // Adiciona cada registro salvo à tabela
+    dadosSalvos.forEach(dado => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `<td>${dado.studentName}</td><td>${dado.email}</td><td>${dado.count}</td>`;
+        tableBody.appendChild(newRow);
+    });
+}
 
 /**
  * Adiciona um ouvinte de evento 'submit' ao formulário para lidar com o envio do formulário.
@@ -39,7 +58,7 @@ function enviar(form, tableBody) {
             alert("Por favor, preencha todos os campos.");
         }
     });
-};
+}
 
 /**
  * Faz uma requisição POST para o servidor com o nome do estudante, o email e o tipo de estudante.
@@ -65,7 +84,7 @@ function cadastro(studentName, email, tipoEstudante, form, tableBody) {
     })
     // Quando a resposta da requisição chega, a converte para JSON
     .then(response => response.json())
-    // Quando a conversão para JSON termina, chama a função adicionarOuAtualizarLinha passando os dados da resposta, o nome do estudante e o email
+    // Quando a conversão para JSON termina, chama a função verificar_undefined passando os dados da resposta, o nome do estudante e o email
     .then(data => {
         verificar_undefined(data, studentName, email, tableBody);
     })
@@ -77,7 +96,7 @@ function cadastro(studentName, email, tipoEstudante, form, tableBody) {
 
     // Reseta o formulário (limpa os campos)
     form.reset();
-};
+}
 
 /**
  * Verifica se a resposta possui a contagem de presença definida e chama a função para adicionar ou atualizar a linha na tabela.
@@ -94,7 +113,7 @@ function verificar_undefined(data, studentName, email, tableBody) {
         // Se count não estiver definido, exibe um erro no console e alerta o usuário
         console.error('Count is undefined:', data);
     }
-};
+}
 
 /**
  * Adiciona uma nova linha na tabela ou atualiza uma linha existente.
@@ -123,7 +142,35 @@ function adicionarOuAtualizarLinha(data, studentName, email, tableBody) {
         newRow.innerHTML = `<td>${studentName}</td><td>${email}</td><td>${count}</td>`;
         tableBody.appendChild(newRow);
     }
-};
+
+    // Atualiza os dados salvos no localStorage
+    atualizarLocalStorage(tableBody);
+}
+
+/**
+ * Atualiza os dados de presença salvos no localStorage com os dados da tabela.
+ * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
+ */
+function atualizarLocalStorage(tableBody) {
+    // Cria um array para armazenar os dados de presença
+    const dados = [];
+
+    // Adiciona cada linha da tabela ao array de dados
+    Array.from(tableBody.querySelectorAll('tr')).forEach(row => {
+        const [nameCell, emailCell, countCell] = row.querySelectorAll('td');
+        dados.push({
+            studentName: nameCell.textContent,
+            email: emailCell.textContent,
+            count: countCell.textContent
+        });
+    });
+
+    // Salva o array de dados no localStorage
+    localStorage.setItem('presenca', JSON.stringify(dados));
+    console.log(localStorage
+
+    );
+}
 
 /**
  * Lidar com erros na requisição POST.

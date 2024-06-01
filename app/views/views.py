@@ -55,8 +55,10 @@ def Registro_Frequencia():
             # Consulta a frequência para o dia e email especificados
             usuario_calouro, CadastroDiaCalouro = calouro.consulta_frequencia()
             usuario_voluntario,CadastroDiaVoluntario = voluntario.consulta_frequencia()
+            
             registroPendenteCalouro = (usuario_calouro) and (not CadastroDiaCalouro)
             registroPendenteVoluntario = (usuario_voluntario) and  (not CadastroDiaVoluntario)
+            
             PermissaoCalouro =  registroPendenteCalouro and (dados['tipo'] in ('Calouro', 'Calouros', 'calouro', 'calouros'))
             PermissaoVoluntario = registroPendenteVoluntario and \
                 (dados['tipo'] in ('Voluntario', 'Voluntarios', 'voluntario', 'voluntarios'))
