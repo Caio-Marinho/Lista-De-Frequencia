@@ -167,9 +167,7 @@ function atualizarLocalStorage(tableBody) {
 
     // Salva o array de dados no localStorage
     localStorage.setItem('presenca', JSON.stringify(dados));
-    console.log(localStorage
-
-    );
+    console.log(localStorage);
 }
 
 /**

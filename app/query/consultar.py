@@ -135,14 +135,14 @@ class Voluntario(Frequencia):
         
         dadosCompleto = DadosSchema_Voluntarios(many=True).dumps(consultaCompleta, indent=2)
         
-        consultaNome = Calouros.query.filter_by(
+        consultaNome = Voluntarios.query.filter_by(
             nome=self.get_nome(),
             data=self.get_dia()
         ).all()
         
         dadosNome = DadosSchema_Voluntarios(many=True).dumps(consultaNome, indent=2)
        
-        consultaEmail = Calouros.query.filter_by(
+        consultaEmail = Voluntarios.query.filter_by(
             email=self.get_email(),
             data=self.get_dia()
         ).all()
@@ -159,7 +159,7 @@ class Voluntario(Frequencia):
         
         verdade = [email_DadosCompleto==email_DadosEmail,nome_dadosCompleto==nome_dadosNome]
         
-        if len(dadosCompleto)==0:
+        if len(dadosEmail)==0 and len(dadosNome)==0:
             return True,self.get_dia() in dadosCompleto
         else:
             return all(verdade), self.get_dia() in dadosCompleto

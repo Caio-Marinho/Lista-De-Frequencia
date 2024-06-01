@@ -1,5 +1,6 @@
 import os # Os fornece uma maneira de usar funcionalidades dependentes do sistema operacional, como verificar se um diretório existe.
 from flask_migrate import Migrate,init # Migrate é a classe para gerenciar migrações e init é a função para inicializar as migrações.
+from app.models import db
 
 
 migrate = Migrate()
