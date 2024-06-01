@@ -1,136 +1,71 @@
 # Importa componentes do micro framework Flask que serve para criar aplicações web
-from flask import Blueprint, request, render_template, jsonify, send_file, redirect, url_for,render_template_string
-
-# Importa date e datetime para manipulação de datas.
-from datetime import date, datetime
-
-# Função personalizada 'Funcion'.
-from app.functions.function import Funcion
-
-# Função personalizada 'Arquivo'.
-from app.doc.arquivo import Arquivo
-
-# Operações do sistema operacional.
-import os
+from flask import Blueprint, jsonify, send_file, redirect, url_for
 
 # Indica retorno de múltiplos tipos de dados.
-from typing import Union
+from typing import Union, List
 
-# Importa funções de consulta e adição específicas do sistema.
-from app.query.consultar import Voluntario,Calouro,Frequencia
-from app.query.adicionar import Adicionar_Calouro,Adicionar_Voluntario
+# Importa as funções da views
+from app.views.views import index, Registro_Frequencia, consulta_presenca, download_Arquivo
 
 # Cria uma instância de Blueprint para rotas chamada 'routes'.
 bp = Blueprint('routes', __name__)
 
-# Define uma data limite como '2024-04-19' e a data atual do sistema.
-data_limite: datetime = datetime.strptime('2024-04-19', '%Y-%m-%d')
-sua_data1: datetime = datetime.strptime(str(date.today()), '%Y-%m-%d')
-
-# Rota principal que carrega o template index.html.
 @bp.route('/')
 @bp.route('/home')
-def home() -> str:  # O '-> str' indica o retorno como String
+def home() -> str:
     """
     Renderiza a página inicial.
 
     Returns:
         str: O conteúdo renderizado do template index.html.
     """
-    return render_template('index.html')
+    return index()
 
-# Rota para registrar a frequência dos alunos ou voluntários.
 @bp.route("/Frequencia", methods=['GET', 'POST'])
-def frequencia() -> jsonify:  # O '-> jsonify' indica o retorno como um JSON
+def frequencia() -> jsonify:
     """
     Registra a frequência dos alunos ou voluntários.
 
-    Esta rota recebe dados de formulário ou JSON para registrar a presença de alunos ou voluntários.
+    Returns:
+        jsonify: Um JSON contendo os dados registrados e o número total de registros para o email correspondente.
+    """
+    return Registro_Frequencia()
+
+@bp.errorhandler(404)
+def page_not_found(e):
+    """
+    Redireciona para a página inicial em caso de erro 404.
+
+    Args:
+        e: Exceção gerada pelo erro 404.
 
     Returns:
-        json: os dados do aluno ou voluntário registrados e o número total de registros para o email correspondente.
-              Se ocorrer uma falha, retorna uma mensagem de erro.
+        redirect: Redireciona o usuário para a página inicial.
     """
-    if request.method == 'POST':
-        # Obtém dados JSON da requisição POST
-        dados = request.get_json()
-        sua_data: str = str(date.today())
-        print(dados)
-        Presencas = Frequencia(dados['student-name'], dados['email'], sua_data)
-        
-        print((dados['tipo']))
-        calouro = Calouro(dados['student-name'], dados['email'], sua_data)
-        voluntario = Voluntario(dados['student-name'], dados['email'], sua_data)
-        # Consulta a frequência para o dia e email especificados
-        usuario_calouro = calouro.consulta_frequencia()
-        usuario_voluntario = voluntario.consulta_frequencia()
-        
-        print(usuario_voluntario)
-        
-        # Adiciona registro de frequência baseado nas condições especificadas
-        if (not usuario_calouro) and (dados['tipo'] == 'Calouro')  :
-            adicionarCalouro = Adicionar_Calouro(dados['student-name'], dados['email'])
-            dados_novos = adicionarCalouro.adicionar()
-        elif (not usuario_voluntario) and (dados['tipo'] == 'Voluntario'):
-            adicionarVoluntario = Adicionar_Voluntario(dados['student-name'], dados['email'])
-            dados_novos = adicionarVoluntario.adicionar()
-        else:
-            dados_novos = Presencas.dicionario_resposta(entidade=dados['tipo'])
+    return redirect(url_for('home'))
 
-        return jsonify(dados_novos)
-
-# Rota para consultar os registros de frequência.
-@bp.route("/consulta", methods=['GET','POST'])
-@bp.route("/consulta/entidade=<entidade>", methods=['GET','POST'])
-@bp.route("/consulta/nome=<nome>&entidade=<entidade>", methods=['GET','POST'])
-def consulta(entidade='Calouro',nome=None) -> str:  # O '-> str' indica o retorno de uma string
+@bp.route("/consulta", methods=['GET', 'POST'])
+@bp.route("/consulta/entidade=<entidade>", methods=['GET', 'POST'])
+@bp.route("/consulta/nome=<nome>&entidade=<entidade>", methods=['GET', 'POST'])
+def consulta(entidade: str = None, nome: str = None) -> Union[str, List[List[Union[int, str]]]]:
     """
-    Consulta os registros de frequência dos alunos ou voluntários.
+    Consulta os registros de frequência.
+
+    Args:
+        entidade (str, optional): A entidade para a qual a consulta de presença será realizada.
+        nome (str, optional): O nome para o qual a consulta de presença será realizada.
 
     Returns:
-        str: O conteúdo renderizado do template Consulta.html contendo os registros de frequência.
+        Union[str, List[List[Union[int, str]]]]: O resultado da consulta, que pode ser uma string ou uma lista de listas contendo inteiros ou strings.
     """
-    global listaOrganizada  # Define a variável 'listaOrganizada' como global
-    print(entidade)
-    consulta = Frequencia.consulta_geral(entidade=entidade)
-    lista = []
-    listaOrganizada = Funcion(lista).lista_organizada(entidade,consulta)
-    listaFiltrada = [sublista for sublista in listaOrganizada if any(str(nome).lower() in texto.lower() for texto in sublista)]
-    listaExibida =listaFiltrada if listaFiltrada else listaOrganizada
-    return render_template('Consulta.html', consulta=listaExibida)
+    return consulta_presenca(entidade, nome)
 
-# Rota para baixar o arquivo de frequência.
 @bp.route('/download', methods=['GET'])
-def download() -> Union[send_file, redirect]:  # O '-> Union[send_file, redirect]' indica que vai retornar o send_file ou redirect
+def download() -> Union[send_file, redirect]:
     """
-    Baixa o arquivo de frequência em formato Excel.
+    Baixa o arquivo de frequência.
 
     Returns:
-        file: O arquivo de frequência para download.
+        Union[send_file, redirect]: O arquivo a ser baixado ou um redirecionamento.
     """
-    try:
-        # Inicializa listas vazias para armazenar os dados dos registros de frequência.
-        id: list = []  # Lista para armazenar os IDs dos registros.
-        nome: list = []  # Lista para armazenar os nomes dos alunos/voluntários.
-        email: list = []  # Lista para armazenar os emails dos alunos/voluntários.
-        dias: list = []  # Lista para armazenar as datas dos registros.
-        horas: list = []  # Lista para armazenar as horas dos registros.
-
-        # Loop para iterar sobre os registros organizados e atribuir cada valor a sua respectiva lista.
-        for item in listaOrganizada:
-            id.append(item[0])  # Adiciona o ID do registro à lista 'id'.
-            nome.append(item[1])  # Adiciona o nome do aluno/voluntário à lista 'nome'.
-            email.append(item[2])  # Adiciona o email do aluno/voluntário à lista 'email'.
-            dias.append(item[3])  # Adiciona a data do registro à lista 'dias'.
-            horas.append(item[4])  # Adiciona a hora do registro à lista 'horas'.
-
-        # Cria uma instância da classe Arquivo com os dados para salvar os registros em um arquivo Excel.
-        Excel = Arquivo(id, nome, email, dias, horas)
-        # Chama o método 'salvar' do objeto 'Excel' para salvar os dados no arquivo 'frequencia.xlsx'.
-        Excel.salvar()
-
-        # Retorna o arquivo 'frequencia.xlsx' para download.
-        return send_file(os.path.join(os.getcwd(), "app/doc/frequencia.xlsx"), as_attachment=True)
-    except:  # Captura exceções caso ocorra alguma falha
-        # Se ocorrer um erro durante o processo, redireciona para a rota 'consulta'.
-        return redirect(url_for('consulta'))
+    return download_Arquivo()
