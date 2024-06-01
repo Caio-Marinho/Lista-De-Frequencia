@@ -1,36 +1,33 @@
-// Executa o código quando o conteúdo do documento HTML está completamente carregado
-document.addEventListener('DOMContentLoaded', function() {
-    // Referências aos elementos do DOM
-    var inputBusca = document.getElementById('search-input'); // Campo de input para busca
-    var botaoBusca = document.getElementById('search-btn'); // Botão de busca
-    var radiosEntidade = document.querySelectorAll('input[name="tipo"]'); // Botões de rádio para selecionar a entidade
-    var corpoTabela = document.getElementById('attendance-table-body'); // Corpo da tabela onde os resultados serão exibidos
+// Referências aos elementos do DOM
+var inputBusca = document.getElementById('search-input'); // Campo de input para busca
+var botaoBusca = document.getElementById('search-btn'); // Botão de busca
+var radiosEntidade = document.querySelectorAll('input[name="tipo"]'); // Botões de rádio para selecionar a entidade
+var corpoTabela = document.getElementById('attendance-table-body'); // Corpo da tabela onde os resultados serão exibidos
 
-    // Adiciona um ouvinte de evento ao botão de busca
-    botaoBusca.addEventListener('click', function() {
-        atualizarTabela(); // Atualiza a tabela com base nos parâmetros de busca
-        navegarComParametros(); // Atualiza a URL com os parâmetros de busca
-    });
+// Adiciona um ouvinte de evento ao botão de busca
+botaoBusca.addEventListener('click', function() {
+    atualizarTabela(); // Atualiza a tabela com base nos parâmetros de busca
+    navegarComParametros(); // Atualiza a URL com os parâmetros de busca
+});
 
-    // Adiciona um ouvinte de evento para o evento de input no campo de busca
-    inputBusca.addEventListener('input', function() {
-        atualizarTabela(); // Atualiza a tabela em tempo real enquanto o usuário digita
-    });
+// Adiciona um ouvinte de evento para o evento de input no campo de busca
+inputBusca.addEventListener('input', function() {
+    atualizarTabela(); // Atualiza a tabela em tempo real enquanto o usuário digita
+});
 
-    // Adiciona ouvintes de evento para os botões de rádio
-    radiosEntidade.forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            atualizarTabela(); // Atualiza a tabela quando a entidade selecionada é alterada
-            navegarComParametros(); // Atualiza a URL com os novos parâmetros de busca
-        });
+// Adiciona ouvintes de evento para os botões de rádio
+radiosEntidade.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        atualizarTabela(); // Atualiza a tabela quando a entidade selecionada é alterada
+        navegarComParametros(); // Atualiza a URL com os novos parâmetros de busca
     });
 });
 
 /**
-     * Atualiza a tabela com base nos parâmetros de busca.
-     * 
-     * @returns {void}
-     */
+ * Atualiza a tabela com base nos parâmetros de busca.
+ * 
+ * @returns {void}
+ */
 function atualizarTabela() {
     var termoBusca = inputBusca.value.trim(); // Obtém o termo de busca, removendo espaços em branco
     var entidadeSelecionada = ''; // Inicializa a variável para a entidade selecionada
@@ -42,15 +39,15 @@ function atualizarTabela() {
         }
     });
     Rota_Atualizar(termoBusca, entidadeSelecionada); // Chama a função para atualizar a rota com os parâmetros
-};
+}
 
 /**
-     * Atualiza a rota com os parâmetros de busca e entidade selecionada.
-     * 
-     * @param {string} termoBusca - O termo de busca.
-     * @param {string} entidadeSelecionada - A entidade selecionada.
-     * @returns {void}
-     */
+ * Atualiza a rota com os parâmetros de busca e entidade selecionada.
+ * 
+ * @param {string} termoBusca - O termo de busca.
+ * @param {string} entidadeSelecionada - A entidade selecionada.
+ * @returns {void}
+ */
 function Rota_Atualizar(termoBusca, entidadeSelecionada) {
     // Constrói a URL com o termo de busca e a entidade como parâmetros de consulta
     var urlBusca = '/consulta/';
@@ -58,16 +55,9 @@ function Rota_Atualizar(termoBusca, entidadeSelecionada) {
         urlBusca += 'nome=' + encodeURIComponent(termoBusca) + '&';
     }
     urlBusca += 'entidade=' + encodeURIComponent(entidadeSelecionada);
-
-    URL_BUSCA(urlBusca);
-};
-
-/**
-     * Atualiza a rota com os parâmetros de busca e entidade selecionada.
-     * 
-     * @param {string} urlBusca - url de busca de filtro.
-     * @returns {void}
-     */
+    URL_BUSCA(urlBusca);;
+    
+}
 function URL_BUSCA(urlBusca){
     // Realiza uma requisição AJAX para obter os resultados filtrados
     fetch(urlBusca)
@@ -90,13 +80,13 @@ function URL_BUSCA(urlBusca){
             }
         })
         .catch(error => console.error('Erro:', error)); // Trata erros da requisição
-};
+}
 
 /**
-     * Navega para a nova URL com os parâmetros de busca na barra de endereço.
-     * 
-     * @returns {void}
-     */
+ * Navega para a nova URL com os parâmetros de busca na barra de endereço.
+ * 
+ * @returns {void}
+ */
 function navegarComParametros() {
     var termoBusca = inputBusca.value.trim(); // Obtém o termo de busca, removendo espaços em branco
     var entidadeSelecionada = ''; // Inicializa a variável para a entidade selecionada
@@ -117,4 +107,6 @@ function navegarComParametros() {
 
     // Atualiza a URL sem recarregar a página
     window.history.replaceState(null, '', urlBusca);
-};
+}
+// Chama a função para atualizar a tabela quando a página carrega
+atualizarTabela();

@@ -1,15 +1,12 @@
-// O código é executado quando o conteúdo do documento HTML é completamente carregado
-document.addEventListener('DOMContentLoaded', function() {
-    // Obtém o formulário de presença e o corpo da tabela do documento
-    const form = document.getElementById('attendance-form');
-    const tableBody = document.querySelector('#attendance-table tbody');
+// Obtém o formulário de presença e o corpo da tabela do documento
+const form = document.getElementById('attendance-form');
+const tableBody = document.querySelector('#attendance-table tbody');
 
-    // Carrega os dados salvos no localStorage e os exibe na tabela
-    carregarDados(tableBody);
+// Carrega os dados salvos no localStorage e os exibe na tabela
+carregarDados(tableBody);
 
-    // Chama a função enviar passando o formulário como argumento
-    enviar(form, tableBody);
-});
+// Chama a função enviar passando o formulário como argumento
+enviar(form, tableBody);
 
 /**
  * Carrega os dados de presença salvos no localStorage e os exibe na tabela.
@@ -118,7 +115,7 @@ function verificar_undefined(data, studentName, email, tableBody) {
 /**
  * Adiciona uma nova linha na tabela ou atualiza uma linha existente.
  * @param {Object} data - Os dados da resposta.
- * @param {string} studentName - O nome do estudante.
+ * @param {string} studentName  - O nome do estudante.
  * @param {string} email - O email do estudante.
  * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
  */
@@ -191,3 +188,4 @@ function handlePostError() {
         console.log(error); // Loga qualquer erro ocorrido
     });
 }
+

@@ -30,7 +30,7 @@ class Funcion:
             'Dias' é uma string que representa o número de dias que o Calouro ou Voluntario tem estado ativo.
             'Horas' é uma string que representa o número total de horas que o Calouro ou Voluntario tem estado ativo.
         """
-        if (entidade is None) or (consulta is None):
+        if ((entidade is None) and (consulta is None)) or (consulta is None):
             return []  # Retorna uma lista vazia se não houver entidade ou consulta
         else:
             # Remove duplicatas na lista de nomes e emails
