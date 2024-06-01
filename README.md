@@ -18,7 +18,7 @@ da organização, e gerar futuramente certificados de participação.
 ## Instalação
 
 Windows
-[Intale o python versão 3.12.0](https://www.python.org/downloads/release/python-3120/)
+Intale o [python versão 3.12.0](https://www.python.org/downloads/release/python-3120/)
     
 Para Visualização do Projeto, primeiro clone ele em seu ambiente local.
 
