@@ -1,4 +1,9 @@
-// Função para baixar um arquivo CSV
+/**
+ * Função para baixar um arquivo CSV.
+ * 
+ * @param {string} csv - Os dados a serem baixados no formato CSV.
+ * @param {string} nomeArquivo - O nome do arquivo a ser baixado.
+ */
 function baixarCSV(csv, nomeArquivo) {
     var arquivoCSV;  // Variável para armazenar o arquivo CSV
     var linkDownload;  // Variável para armazenar o link de download
@@ -48,7 +53,11 @@ document.getElementById('download-btn-xls').addEventListener('click', function()
     baixarCSV(csv.join("\n"), 'frequencia.xls');
 });
 
-// Função para exportar a tabela para um arquivo CSV
+/**
+ * Função para exportar a tabela para um arquivo CSV.
+ * 
+ * @param {string} nomeArquivo - O nome do arquivo a ser exportado.
+ */
 function exportarTabelaParaCSV(nomeArquivo) {
     var csv = [];  // Array para armazenar os dados do CSV
     var linhas = document.querySelectorAll("#attendance-table tr");  // Seleciona todas as linhas da tabela de presença
