@@ -6,7 +6,7 @@ const tableBody = document.querySelector('#attendance-table tbody');
 carregarDados(tableBody);
 
 // Chama a função enviar passando o formulário como argumento
-enviar(form, tableBody);
+enviarFormulario(form, tableBody);
 
 /**
  * Carrega os dados de presença salvos no localStorage e os exibe na tabela.
@@ -16,12 +16,58 @@ function carregarDados(tableBody) {
     // Obtém os dados salvos no localStorage
     const dadosSalvos = JSON.parse(localStorage.getItem('presenca')) || [];
 
-    // Adiciona cada registro salvo à tabela
-    dadosSalvos.forEach(dado => {
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `<td>${dado.studentName}</td><td>${dado.email}</td><td>${dado.count}</td>`;
-        tableBody.appendChild(newRow);
+    // Obtém registros existentes da tabela
+    const registrosExistentes = obterRegistrosExistentes(tableBody);
+
+    // Adiciona ou atualiza os registros na tabela
+    atualizarTabelaComDados(dadosSalvos, registrosExistentes, tableBody);
+}
+
+/**
+ * Obtém os registros existentes da tabela.
+ * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
+ * @returns {Map} - Um mapa com os registros existentes.
+ */
+function obterRegistrosExistentes(tableBody) {
+    const registrosExistentes = new Map();
+    Array.from(tableBody.querySelectorAll('tr')).forEach(row => {
+        const [nameCell, emailCell] = row.querySelectorAll('td');
+        const key = `${nameCell.textContent.toLowerCase()}|${emailCell.textContent.toLowerCase()}`;
+        registrosExistentes.set(key, row);
     });
+    return registrosExistentes;
+}
+
+/**
+ * Atualiza a tabela com os dados fornecidos.
+ * @param {Array} dadosSalvos - Os dados salvos no localStorage.
+ * @param {Map} registrosExistentes - Um mapa com os registros existentes.
+ * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
+ */
+function atualizarTabelaComDados(dadosSalvos, registrosExistentes, tableBody) {
+    // Cria um DocumentFragment para adicionar novas linhas à tabela
+    const fragmento = document.createDocumentFragment();
+
+    // Adiciona ou atualiza cada registro salvo na tabela
+    dadosSalvos.forEach(dado => {
+        const key = `${dado.studentName.toLowerCase()}|${dado.email.toLowerCase()}`;
+        const linhaExistente = registrosExistentes.get(key);
+        if (linhaExistente) {
+            // Atualiza a contagem de presença se for diferente
+            const countCell = linhaExistente.querySelector('td:last-child');
+            if (countCell.textContent != dado.count) {
+                countCell.textContent = dado.count;
+            }
+        } else {
+            // Cria uma nova linha e a adiciona ao fragmento
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `<td>${dado.studentName}</td><td>${dado.email}</td><td>${dado.count}</td>`;
+            fragmento.appendChild(newRow);
+        }
+    });
+
+    // Adiciona todas as novas linhas à tabela em uma única operação
+    tableBody.appendChild(fragmento);
 }
 
 /**
@@ -29,7 +75,7 @@ function carregarDados(tableBody) {
  * @param {HTMLFormElement} form - O formulário de presença.
  * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
  */
-function enviar(form, tableBody) {
+function enviarFormulario(form, tableBody) {
     // Adiciona um ouvinte de evento 'submit' ao formulário
     form.addEventListener('submit', function(event) {
         // Previne a ação padrão do evento de envio (que é recarregar a página)
@@ -65,7 +111,11 @@ function enviar(form, tableBody) {
  * @param {HTMLFormElement} form - O formulário de presença.
  * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
  */
-function cadastro(studentName, email, tipoEstudante, form, tableBody) {
+function verificarEmailValido(email) {
+    return email.endsWith('@ufpe.br');
+}
+
+function enviarRequisicao(studentName, email, tipoEstudante, tableBody) {
     // Faz uma requisição fetch para a rota '/Frequencia' com o método POST
     fetch('/Frequencia', {
         method: 'POST',
@@ -81,19 +131,32 @@ function cadastro(studentName, email, tipoEstudante, form, tableBody) {
     })
     // Quando a resposta da requisição chega, a converte para JSON
     .then(response => response.json())
-    // Quando a conversão para JSON termina, chama a função verificar_undefined passando os dados da resposta, o nome do estudante e o email
+    // Quando a conversão para JSON termina, chama a função verificarUndefined passando os dados da resposta, o nome do estudante e o email
     .then(data => {
-        verificar_undefined(data, studentName, email, tableBody);
+        verificarUndefined(data, studentName, email, tableBody);
     })
     // Se ocorrer algum erro durante a requisição fetch ou a conversão para JSON, loga o erro no console
     .catch((error) => {
         console.error('Error:', error);
         handlePostError();
     });
+}
+
+function cadastro(studentName, email, tipoEstudante, form, tableBody) {
+    // Verifica se o email é válido
+    if (!verificarEmailValido(email)) {
+        alert('Por favor, utilize um email da UFPE (terminando com "@ufpe.br").');
+        return; // Encerra a função se o email não for válido
+    }
+
+    // Envia a requisição
+    enviarRequisicao(studentName, email, tipoEstudante, tableBody);
 
     // Reseta o formulário (limpa os campos)
     form.reset();
 }
+
+
 
 /**
  * Verifica se a resposta possui a contagem de presença definida e chama a função para adicionar ou atualizar a linha na tabela.
@@ -102,10 +165,16 @@ function cadastro(studentName, email, tipoEstudante, form, tableBody) {
  * @param {string} email - O email do estudante.
  * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
  */
-function verificar_undefined(data, studentName, email, tableBody) {
+function verificarUndefined(data, studentName, email, tableBody) {
     console.log('Response data:', data); // Log para verificar a estrutura da resposta
     if (data && typeof data.count !== 'undefined') {
-        adicionarOuAtualizarLinha(data, studentName, email, tableBody);
+        const existingRow = encontrarLinhaExistente(studentName, email, tableBody);
+        if (existingRow) {
+            atualizarLinha(existingRow, data.count);
+        } else {
+            adicionarLinha(studentName, email, data.count, tableBody);
+        }
+        atualizarLocalStorage(tableBody);
     } else {
         // Se count não estiver definido, exibe um erro no console e alerta o usuário
         console.error('Count is undefined:', data);
@@ -113,49 +182,55 @@ function verificar_undefined(data, studentName, email, tableBody) {
 }
 
 /**
- * Adiciona uma nova linha na tabela ou atualiza uma linha existente.
- * @param {Object} data - Os dados da resposta.
- * @param {string} studentName  - O nome do estudante.
+ * Procura uma linha existente na tabela que tenha o mesmo nome e email.
+ * @param {string} studentName - O nome do estudante.
  * @param {string} email - O email do estudante.
  * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
+ * @returns {HTMLTableRowElement|null} - A linha existente ou null se não for encontrada.
  */
-function adicionarOuAtualizarLinha(data, studentName, email, tableBody) {
-    // Procura por uma linha existente na tabela que tenha o mesmo nome e email
-    const existingRow = Array.from(tableBody.querySelectorAll('tr')).find(row => {
+function encontrarLinhaExistente(studentName, email, tableBody) {
+    return Array.from(tableBody.querySelectorAll('tr')).find(row => {
         const [nameCell, emailCell] = row.querySelectorAll('td');
         return nameCell.textContent.toLowerCase() === studentName.toLowerCase() && emailCell.textContent.toLowerCase() === email.toLowerCase();
     });
-
-    // Obtém a contagem de presença dos dados da resposta
-    const count = data.count;
-    console.log('Count:', count); // Log para verificar o valor de count
-
-    // Se a linha existente for encontrada, atualiza a contagem de presença na última célula da linha
-    if (existingRow) {
-        existingRow.querySelector('td:last-child').textContent = count;
-    } else {
-        // Se a linha existente não for encontrada, cria uma nova linha e a adiciona na tabela
-        const newRow = document.createElement('tr');
-        
-        const nameCell = document.createElement('td');
-        nameCell.textContent = studentName;
-        newRow.appendChild(nameCell);
-        
-        const emailCell = document.createElement('td');
-        emailCell.textContent = email;
-        newRow.appendChild(emailCell);
-        
-        const countCell = document.createElement('td');
-        countCell.textContent = count;
-        newRow.appendChild(countCell);
-        
-        tableBody.appendChild(newRow);
-    }
-
-    // Atualiza os dados salvos no localStorage
-    atualizarLocalStorage(tableBody);
 }
 
+/**
+ * Atualiza a contagem de presença em uma linha existente.
+ * @param {HTMLTableRowElement} existingRow - A linha existente na tabela.
+ * @param {number} count - A nova contagem de presença.
+ */
+function atualizarLinha(existingRow, count) {
+    const countCell = existingRow.querySelector('td:last-child');
+    if (countCell.textContent != count) {
+        countCell.textContent = count;
+    }
+}
+
+/**
+ * Adiciona uma nova linha à tabela de presença.
+ * @param {string} studentName - O nome do estudante.
+ * @param {string} email - O email do estudante.
+ * @param {number} count - A contagem de presença.
+ * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
+ */
+function adicionarLinha(studentName, email, count, tableBody) {
+    const newRow = document.createElement('tr');
+    
+    const nameCell = document.createElement('td');
+    nameCell.textContent = studentName;
+    newRow.appendChild(nameCell);
+    
+    const emailCell = document.createElement('td');
+    emailCell.textContent = email;
+    newRow.appendChild(emailCell);
+    
+    const countCell = document.createElement('td');
+    countCell.textContent = count;
+    newRow.appendChild(countCell);
+    
+    tableBody.appendChild(newRow);
+}
 
 /**
  * Atualiza os dados de presença salvos no localStorage com os dados da tabela.
@@ -201,4 +276,3 @@ function handlePostError() {
         console.log(error); // Loga qualquer erro ocorrido
     });
 }
-

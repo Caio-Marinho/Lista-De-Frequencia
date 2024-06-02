@@ -52,7 +52,7 @@ class Adicionar_Calouro(Adicionar_Frequencia):
         """
         # Cria uma nova instância de Calouros com os dados fornecidos.
         calouro = Calouros(
-            nome=self.get_nome(),
+            nome=unidecode(self.get_nome()).strip(),
             email=self.get_email(),
             data=date.today()  # Define a data atual como data de registro.
         )
@@ -80,7 +80,7 @@ class Adicionar_Voluntario(Adicionar_Frequencia):
         """
         # Cria uma nova instância de Voluntarios com os dados fornecidos.
         voluntario = Voluntarios(
-            nome=self.get_nome(),
+            nome=unidecode(self.get_nome()).strip(),
             email=self.get_email(),
             data=date.today()  # Define a data atual como data de registro.
         )

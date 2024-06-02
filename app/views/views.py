@@ -1,5 +1,5 @@
 # Importa componentes do micro framework Flask que serve para criar aplicações web
-from flask import Blueprint, request, render_template, jsonify, send_file, redirect, url_for
+from flask import request, render_template, jsonify, send_file, redirect, url_for
 
 # Importa funções de consulta e adição específicas do sistema.
 from app.query.consultar import Voluntario, Calouro, Frequencia
@@ -12,7 +12,7 @@ from app.functions.function import Funcion
 from app.doc.arquivo import Arquivo
 
 # Importa date e datetime para manipulação de datas.
-from datetime import date, datetime
+from datetime import date
 
 # Indica retorno de múltiplos tipos de dados.
 from typing import Union, List
@@ -102,12 +102,13 @@ def consulta_presenca(entidade: str = None, nome: str = None) -> Union[str, List
 
         # Filtra a lista com base no nome fornecido
         listaFiltrada = [sublista for sublista in listaOrganizada if any(str(nome).lower() in texto.lower() for texto in sublista)]
-
+        
         # Seleciona a lista a ser exibida
         listaExibida = listaFiltrada if listaFiltrada else listaOrganizada
+        
         return render_template('Consulta.html', consulta=listaExibida)
     except:
-        return redirect('/consulta')
+        return redirect(url_for('routes.consulta'))
 
 
 def download_Arquivo() -> Union[send_file, redirect]:
@@ -141,4 +142,4 @@ def download_Arquivo() -> Union[send_file, redirect]:
         # Retorna o arquivo 'frequencia.xlsx' para download.
         return send_file(os.path.join(os.getcwd(), "app/doc/frequencia.xlsx"), as_attachment=True)
     except:
-        return redirect('/consulta')
+        return redirect(url_for('routes.consulta'))
