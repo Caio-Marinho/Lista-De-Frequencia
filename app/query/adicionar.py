@@ -19,8 +19,8 @@ class Adicionar_Frequencia:
             nome (str): O nome da pessoa.
             email (str): O email da pessoa.
         """
-        self.__nome = unidecode(nome.strip())  # Remove acentos e espaços extras do nome.
-        self.__email = email
+        self.__nome = unidecode(nome.strip().title())  # Remove acentos e espaços extras do nome.
+        self.__email = email.strip().lower()
 
     def get_nome(self) -> str:
         """Retorna o nome."""
@@ -52,7 +52,7 @@ class Adicionar_Calouro(Adicionar_Frequencia):
         """
         # Cria uma nova instância de Calouros com os dados fornecidos.
         calouro = Calouros(
-            nome=unidecode(self.get_nome()).strip(),
+            nome=self.get_nome(),
             email=self.get_email(),
             data=date.today()  # Define a data atual como data de registro.
         )
@@ -80,7 +80,7 @@ class Adicionar_Voluntario(Adicionar_Frequencia):
         """
         # Cria uma nova instância de Voluntarios com os dados fornecidos.
         voluntario = Voluntarios(
-            nome=unidecode(self.get_nome()).strip(),
+            nome=self.get_nome(),
             email=self.get_email(),
             data=date.today()  # Define a data atual como data de registro.
         )
