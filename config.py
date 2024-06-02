@@ -14,9 +14,9 @@ class Config:
         Returns:
             None
         """
-        engine = sqlalchemy.create_engine('mysql+mysqlconnector://root:teste@localhost:3306/')
+        engine = sqlalchemy.create_engine('mysql+mysqlconnector://username:password@hostname:port/')
         with engine.connect() as connection:
-           connection.execute(sqlalchemy.text("CREATE DATABASE IF NOT EXISTS FREQUENCIA;"))
+           connection.execute(sqlalchemy.text("CREATE DATABASE IF NOT EXISTS DATABASE;"))
 
     # A chave secreta é usada para proteger sessões e cookies gerados pelo Flask.
     # A chave secreta deve ser mantida em segredo e nunca deve ser compartilhada publicamente.
@@ -30,7 +30,7 @@ class Config:
 
     # Define a URI do banco de dados para MySQL.
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI',
-                                             'mysql+mysqlconnector://root:teste@localhost:3306/frequencia')
+                                             'mysql+mysqlconnector://username:password@hostname:port/database')
     
     # Define se as modificações no banco de dados devem ser rastreadas. Isso ajuda no controle de versão do banco de
     # dados.
