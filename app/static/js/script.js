@@ -137,6 +137,12 @@ function enviarRequisicao(studentName, email, tipoEstudante, tableBody) {
     })
     // Se ocorrer algum erro durante a requisição fetch ou a conversão para JSON, loga o erro no console
     .catch((error) => {
+        const Data = new Date();
+        const dia = Data.getDate(); // Use getDate() para obter o dia do mês
+        const mes = Data.getMonth() + 1; // Use getMonth() e adicione 1 porque os meses são baseados em zero
+        const ano = Data.getFullYear();
+
+        alert(`Esses Dados já foram inseridos hoje: ${dia}/${mes}/${ano}`);
         console.error('Error:', error);
         handlePostError();
     });
