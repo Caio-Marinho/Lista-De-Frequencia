@@ -18,7 +18,7 @@ da organização, e gerar futuramente certificados de participação.
 ## Instalação
 
 Windows
-Intale o [python versão 3.12.0](https://www.python.org/downloads/release/python-3120/)
+[Intale o python versão 3.12.0](https://www.python.org/downloads/release/python-3120/)
     
 Para Visualização do Projeto, primeiro clone ele em seu ambiente local.
 
@@ -39,14 +39,24 @@ Com o Ambiente Virtual Inicializado instale as depedências do projeto como Bibl
 ```
 pip install -r requirements.txt
 ```
-Uma vez Instalado você pode iniciar o Projeto.
+Uma vez Instalado, configure a conexão com o banco de dados no arquivo config.py e você pode iniciar o Projeto.
     
 ```
 flask run (desenvolvimento)
 ou
 python.exe run.py (Produção)
 ```
-    
+## Rotas
+Tem duas Rotas principais 
+uma que é a rota de cadastro que é a / ou /home que é acessada logo que inicia.
+Digita na barra localhost: e a porta de acesso a sua aplicação quando ela estiver sendo executada ex:
+```
+Localhost:5000/ 
+```
+e a Rota consulta que só pode ser acessada passando a rota na URL
+```
+Localhost:5000/consulta
+```
 ## Autor
 
 - [@Caio-Marinho](https://github.com/Caio-Marinho)
