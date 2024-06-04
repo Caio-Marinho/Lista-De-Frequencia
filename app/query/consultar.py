@@ -18,8 +18,8 @@ class Frequencia:
             email (str): O endereço de e-mail da pessoa.
             dia (str): A data no formato 'YYYY-MM-DD'.
         """
-        self.__nome = unidecode(nome).strip()  # Remove acentos e espaços extras do nome
-        self.__email = email
+        self.__nome = unidecode(nome.strip().title())  # Remove acentos e espaços extras do nome
+        self.__email = str(email).strip()
         self.__dia = dia
 
     # Métodos get para acessar os atributos privados nome, email e dia.
@@ -82,43 +82,50 @@ class Calouro(Frequencia):
     """
     def consulta_frequencia(self) -> bool:
         """Consulta a frequência do calouro."""
-        consultaCompleta = Calouros.query.filter_by(
+        consultaCompletaDia = Calouros.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
             data=self.get_dia()
         ).all()
         
-        dadosCompleto = DadosSchema_Calouros(many=True).dumps(consultaCompleta, indent=2)
+        dadosCompletoDia = DadosSchema_Calouros(many=True).dumps(consultaCompletaDia, indent=2)
+        
+        consultaCompleto = Calouros.query.filter_by(
+            nome=self.get_nome(),
+            email=self.get_email(),
+        ).all()
+        
+        dadosCompleto = DadosSchema_Calouros(many=True).dumps(consultaCompleto, indent=2)
         
         consultaNome = Calouros.query.filter_by(
             nome=self.get_nome(),
-            data=self.get_dia()
         ).all()
         
         dadosNome = DadosSchema_Calouros(many=True).dumps(consultaNome, indent=2)
         
         consultaEmail = Calouros.query.filter_by(
             email=self.get_email(),
-            data=self.get_dia()
         ).all()
         
         dadosEmail = DadosSchema_Calouros(many=True).dumps(consultaEmail, indent=2)
         
-        email_DadosCompleto = self.get_email() in dadosCompleto
+        email_DadosCompleto = self.get_email() in dadosCompletoDia
         
         email_DadosEmail = self.get_email() in dadosEmail
         
-        nome_dadosCompleto = self.get_nome() in dadosCompleto
+        nome_dadosCompleto = self.get_nome() in dadosCompletoDia
         
-        RegistradaPresenca = self.get_dia() in dadosCompleto
+        RegistradaPresenca = self.get_dia() in dadosCompletoDia
         
         nome_dadosNome = self.get_nome() in dadosNome
         
-        verdade = [email_DadosCompleto==email_DadosEmail,nome_dadosCompleto==nome_dadosNome]
+        Completo = all([self.get_nome() in dadosCompleto,self.get_email() in dadosCompleto])
+        
+        verdade = [Completo==email_DadosEmail,Completo==nome_dadosNome,not all([nome_dadosCompleto,email_DadosCompleto])]
         
         if len(dadosEmail)==0 and len(dadosNome)==0:
             return True, RegistradaPresenca
-        else:
+        elif all(verdade):
             return all(verdade), RegistradaPresenca
 
 class Voluntario(Frequencia):
@@ -127,10 +134,17 @@ class Voluntario(Frequencia):
     """
     def consulta_frequencia(self) -> bool:
         """Consulta a frequência do calouro."""
-        consultaCompleta = Voluntarios.query.filter_by(
+        consultaCompletaDia = Voluntarios.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
             data=self.get_dia()
+        ).all()
+        
+        dadosCompletoDia = DadosSchema_Voluntarios(many=True).dumps(consultaCompletaDia, indent=2)
+        
+        consultaCompleta = Voluntarios.query.filter_by(
+            nome=self.get_nome(),
+            email=self.get_email(),
         ).all()
         
         dadosCompleto = DadosSchema_Voluntarios(many=True).dumps(consultaCompleta, indent=2)
@@ -149,17 +163,19 @@ class Voluntario(Frequencia):
         
         dadosEmail = DadosSchema_Voluntarios(many=True).dumps(consultaEmail, indent=2)
         
-        email_DadosCompleto = self.get_email() in dadosCompleto
+        email_DadosCompleto = self.get_email() in dadosCompletoDia
         
         email_DadosEmail = self.get_email() in dadosEmail
         
-        nome_dadosCompleto = self.get_nome() in dadosCompleto
+        nome_dadosCompleto = self.get_nome() in dadosCompletoDia
         
         nome_dadosNome = self.get_nome() in dadosNome
         
-        verdade = [email_DadosCompleto==email_DadosEmail,nome_dadosCompleto==nome_dadosNome]
+        completo = all([self.get_nome() in dadosCompleto,self.get_email() in dadosCompleto])
+        
+        verdade = [completo==email_DadosEmail,completo==nome_dadosNome,not all([email_DadosCompleto, nome_dadosCompleto])]
         
         if len(dadosEmail)==0 and len(dadosNome)==0:
-            return True,self.get_dia() in dadosCompleto
+            return True,self.get_dia() in dadosCompletoDia
         else:
-            return all(verdade), self.get_dia() in dadosCompleto
+            return all(verdade), self.get_dia() in dadosCompletoDia
