@@ -15,7 +15,7 @@ da organização, e gerar futuramente certificados de participação.
 ![FLASK](https://img.shields.io/badge/-FLASK-black?logo=flask&style=social)
 ![MYSQL](https://img.shields.io/badge/-MYSQL-black?logo=mysql&style=social)
 
-## Estrutuara de pastas
+## Estrutura de pastas
 ```
 /app
 |---/Config // arquivo de configuração
