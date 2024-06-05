@@ -2,7 +2,7 @@ from flask import Flask  # Importa a classe Flask do pacote Flask.
 from app.models import db  # Importa o banco de dados definido no módulo models.
 from app.schema import ma  # Importa o Marshmallow para serialização/deserialização.
 from Menage.menage import migrate, Migracao  # Importa o Flask-Migrate para migração de banco de dados.
-from config import Config  # Importa as configurações do aplicativo do módulo config.
+from app.Config.config import Config  # Importa as configurações do aplicativo do módulo config.
 from flask_cors import CORS  # Importa o Flask-CORS para lidar com o CORS.
 from flaskenv import arquivo_env  # Importa a função para criar um arquivo env para o ambiente de desenvolvimento.
 import asyncio  # Importa a biblioteca asyncio para suporte a programação assíncrona.

@@ -15,6 +15,51 @@ da organização, e gerar futuramente certificados de participação.
 ![FLASK](https://img.shields.io/badge/-FLASK-black?logo=flask&style=social)
 ![MYSQL](https://img.shields.io/badge/-MYSQL-black?logo=mysql&style=social)
 
+## Estrutuara de pastas
+```
+/app
+|---/Config // arquivo de configuração
+|   - config.py 
+|---/doc // arquivo para manipulação de documentos
+|   - Arquivo.py 
+|---/functions // arquivo para funções
+|   - function 
+|---/models // arquivo para os modelos do banco de dados
+|   -__init__.py
+|   -models.py 
+|---/query // arquivo para as query do banco de dados
+|   -adicionar.py 
+|   -consultar.py 
+|---/routes // arquivo de rotas
+|   -routes.py 
+|---/schema // arquivo para o schemas de banco de dados
+|   -__init__.py
+|   -schema.py 
+|---/static
+|   --/css // arquivo css
+|       -style.css 
+|   --/img // arquivo de imagens
+|       -Frequencia.png(logo da pagina)  
+|   --/js // arquivo javascript
+|       -download.js
+|       -script.js
+|       -search.js
+|---/templates // arquivo html
+|   --/partials
+|       -atendimento_tabela.html(somente a parte do html para tabela)
+|   -Consulta.html
+|   -Index.html
+|---/views // arquivo de visualização
+|   -views.py
+|-__init__.py
+|---/Menage // arquivo de gerenciamento
+|   -menage.py
+|-flaskenv.py
+|-requirements.txt // dependencias
+|-run.py // execução do projeto
+|
+```
+
 ## Instalação
 
 Windows
