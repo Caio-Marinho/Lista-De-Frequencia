@@ -31,8 +31,8 @@ function carregarDados(tableBody) {
 function obterRegistrosExistentes(tableBody) {
     const registrosExistentes = new Map();
     Array.from(tableBody.querySelectorAll('tr')).forEach(row => {
-        const [nameCell, emailCell] = row.querySelectorAll('td');
-        const key = `${nameCell.textContent.toLowerCase()}|${emailCell.textContent.toLowerCase()}`;
+        const [nameCell, emailCell,tipoCell] = row.querySelectorAll('td');
+        const key = `${nameCell.textContent.toLowerCase()}|${emailCell.textContent.toLowerCase()}|${tipoCell.textContent.toLowerCase()}`;
         registrosExistentes.set(key, row);
     });
     return registrosExistentes;
@@ -50,7 +50,7 @@ function atualizarTabelaComDados(dadosSalvos, registrosExistentes, tableBody) {
 
     // Adiciona ou atualiza cada registro salvo na tabela
     dadosSalvos.forEach(dado => {
-        const key = `${dado.studentName.toLowerCase()}|${dado.email.toLowerCase()}`;
+        const key = `${dado.studentName.toLowerCase()}|${dado.email.toLowerCase()}|${dado.type}`;
         const linhaExistente = registrosExistentes.get(key);
         if (linhaExistente) {
             // Atualiza a contagem de presença se for diferente
@@ -61,7 +61,7 @@ function atualizarTabelaComDados(dadosSalvos, registrosExistentes, tableBody) {
         } else {
             // Cria uma nova linha e a adiciona ao fragmento
             const newRow = document.createElement('tr');
-            newRow.innerHTML = `<td>${dado.studentName}</td><td>${dado.email}</td><td>${dado.count}</td>`;
+            newRow.innerHTML = `<td>${dado.studentName}</td><td>${dado.email}</td><td>${dado.count}</td><td>${dado.type}</td>`;
             fragmento.appendChild(newRow);
         }
     });
@@ -258,7 +258,7 @@ function atualizarLocalStorage(tableBody) {
             studentName: nameCell.textContent,
             email: emailCell.textContent,
             count: countCell.textContent,
-            type:  tipoCell.textContent
+            type:  tipoCell.textContent,
         });
     });
 
