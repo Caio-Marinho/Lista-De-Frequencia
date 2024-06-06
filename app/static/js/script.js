@@ -133,7 +133,8 @@ function enviarRequisicao(studentName, email, tipoEstudante, tableBody) {
     .then(response => response.json())
     // Quando a conversão para JSON termina, chama a função verificarUndefined passando os dados da resposta, o nome do estudante e o email
     .then(data => {
-        verificarUndefined(data, studentName, email, tableBody);
+        verificarUndefined(data, studentName, email, tableBody,tipoEstudante);
+        
     })
     // Se ocorrer algum erro durante a requisição fetch ou a conversão para JSON, loga o erro no console
     .catch((error) => {
@@ -171,14 +172,14 @@ function cadastro(studentName, email, tipoEstudante, form, tableBody) {
  * @param {string} email - O email do estudante.
  * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
  */
-function verificarUndefined(data, studentName, email, tableBody) {
+function verificarUndefined(data, studentName, email, tableBody,tipoEstudante) {
     console.log('Response data:', data); // Log para verificar a estrutura da resposta
     if (data && typeof data.count !== 'undefined') {
         const existingRow = encontrarLinhaExistente(studentName, email, tableBody);
         if (existingRow) {
             atualizarLinha(existingRow, data.count);
         } else {
-            adicionarLinha(studentName, email, data.count, tableBody);
+            adicionarLinha(studentName, email, data.count, tableBody,tipoEstudante);
         }
         atualizarLocalStorage(tableBody);
     } else {
@@ -220,7 +221,7 @@ function atualizarLinha(existingRow, count) {
  * @param {number} count - A contagem de presença.
  * @param {HTMLTableSectionElement} tableBody - O corpo da tabela de presença.
  */
-function adicionarLinha(studentName, email, count, tableBody) {
+function adicionarLinha(studentName, email, count, tableBody,tipoEstudante) {
     const newRow = document.createElement('tr');
     
     const nameCell = document.createElement('td');
@@ -234,6 +235,10 @@ function adicionarLinha(studentName, email, count, tableBody) {
     const countCell = document.createElement('td');
     countCell.textContent = count;
     newRow.appendChild(countCell);
+
+    const tipoCell = document.createElement('td');
+    tipoCell.textContent = tipoEstudante;
+    newRow.appendChild(tipoCell);
     
     tableBody.appendChild(newRow);
 }
@@ -248,11 +253,12 @@ function atualizarLocalStorage(tableBody) {
 
     // Adiciona cada linha da tabela ao array de dados
     Array.from(tableBody.querySelectorAll('tr')).forEach(row => {
-        const [nameCell, emailCell, countCell] = row.querySelectorAll('td');
+        const [nameCell, emailCell, countCell,tipoCell] = row.querySelectorAll('td');
         dados.push({
             studentName: nameCell.textContent,
             email: emailCell.textContent,
-            count: countCell.textContent
+            count: countCell.textContent,
+            type:  tipoCell.textContent
         });
     });
 
