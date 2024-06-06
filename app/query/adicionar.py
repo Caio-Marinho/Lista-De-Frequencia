@@ -1,3 +1,4 @@
+# ESSA PASTA DEVERIA SE CHAMAR NA VERDADE entities
 # Importa os modelos e a instância do banco de dados.
 from app.models import db, Calouros, Voluntarios
 

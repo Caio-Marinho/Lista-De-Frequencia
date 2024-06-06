@@ -133,7 +133,7 @@ class Voluntario(Frequencia):
     Classe para consultar a frequência de voluntários.
     """
     def consulta_frequencia(self) -> bool:
-        """Consulta a frequência do calouro."""
+        """Consulta a frequência do Voluntario."""
         consultaCompletaDia = Voluntarios.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
@@ -142,23 +142,21 @@ class Voluntario(Frequencia):
         
         dadosCompletoDia = DadosSchema_Voluntarios(many=True).dumps(consultaCompletaDia, indent=2)
         
-        consultaCompleta = Voluntarios.query.filter_by(
+        consultaCompleto = Voluntarios.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
         ).all()
         
-        dadosCompleto = DadosSchema_Voluntarios(many=True).dumps(consultaCompleta, indent=2)
+        dadosCompleto = DadosSchema_Voluntarios(many=True).dumps(consultaCompleto, indent=2)
         
         consultaNome = Voluntarios.query.filter_by(
             nome=self.get_nome(),
-            data=self.get_dia()
         ).all()
         
         dadosNome = DadosSchema_Voluntarios(many=True).dumps(consultaNome, indent=2)
-       
+        
         consultaEmail = Voluntarios.query.filter_by(
             email=self.get_email(),
-            data=self.get_dia()
         ).all()
         
         dadosEmail = DadosSchema_Voluntarios(many=True).dumps(consultaEmail, indent=2)
@@ -169,13 +167,15 @@ class Voluntario(Frequencia):
         
         nome_dadosCompleto = self.get_nome() in dadosCompletoDia
         
+        RegistradaPresenca = self.get_dia() in dadosCompletoDia
+        
         nome_dadosNome = self.get_nome() in dadosNome
         
-        completo = all([self.get_nome() in dadosCompleto,self.get_email() in dadosCompleto])
+        Completo = all([self.get_nome() in dadosCompleto,self.get_email() in dadosCompleto])
         
-        verdade = [completo==email_DadosEmail,completo==nome_dadosNome,not all([email_DadosCompleto, nome_dadosCompleto])]
+        verdade = [Completo==email_DadosEmail,Completo==nome_dadosNome,not all([nome_dadosCompleto,email_DadosCompleto])]
         
         if len(dadosEmail)==0 and len(dadosNome)==0:
-            return True,self.get_dia() in dadosCompletoDia
-        else:
-            return all(verdade), self.get_dia() in dadosCompletoDia
+            return True, RegistradaPresenca
+        elif all(verdade):
+            return all(verdade), RegistradaPresenca

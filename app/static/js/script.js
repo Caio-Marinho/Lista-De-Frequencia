@@ -54,7 +54,7 @@ function atualizarTabelaComDados(dadosSalvos, registrosExistentes, tableBody) {
         const linhaExistente = registrosExistentes.get(key);
         if (linhaExistente) {
             // Atualiza a contagem de presença se for diferente
-            const countCell = linhaExistente.querySelector('td:last-child');
+            const countCell = linhaExistente.querySelector('td:nth-child(3)');
             if (countCell.textContent != dado.count) {
                 countCell.textContent = dado.count;
             }
@@ -208,7 +208,7 @@ function encontrarLinhaExistente(studentName, email, tableBody) {
  * @param {number} count - A nova contagem de presença.
  */
 function atualizarLinha(existingRow, count) {
-    const countCell = existingRow.querySelector('td:last-child');
+    const countCell = existingRow.querySelector('td:nth-child(3)');
     if (countCell.textContent != count) {
         countCell.textContent = count;
     }

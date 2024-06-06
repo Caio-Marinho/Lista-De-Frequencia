@@ -62,7 +62,6 @@ def Registro_Frequencia():
             PermissaoCalouro =  registroPendenteCalouro and (dados['tipo'] in ('Calouro', 'Calouros', 'calouro', 'calouros'))
             PermissaoVoluntario = registroPendenteVoluntario and \
                 (dados['tipo'] in ('Voluntario', 'Voluntarios', 'voluntario', 'voluntarios'))
-            
             # Adiciona registro de frequência baseado nas condições especificadas
             if PermissaoCalouro:
                 adicionarCalouro = Adicionar_Calouro(dados['student-name'], dados['email'])
