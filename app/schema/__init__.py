@@ -14,4 +14,4 @@ ma = Marshmallow()
 # Um esquema em Marshmallow é uma maneira de representar a estrutura dos dados que queremos 
 # serializar/desserializar. Aqui, estamos importando o esquema DadosSchema_Calouros, que 
 # define a estrutura dos dados para os calouros.
-from .schema import DadosSchema_Calouros
+from .schema import DadosSchema_Calouros, DadosSchema_Voluntarios

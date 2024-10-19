@@ -1,5 +1,5 @@
 # Importa componentes do micro framework Flask que serve para criar aplicações web
-from flask import Blueprint, jsonify, send_file, redirect, url_for
+from flask import jsonify, send_file, redirect, url_for
 
 # Indica retorno de múltiplos tipos de dados.
 from typing import Union, List
@@ -7,8 +7,7 @@ from typing import Union, List
 # Importa as funções da views
 from app.views.views import index, Registro_Frequencia, consulta_presenca, download_Arquivo
 
-# Cria uma instância de Blueprint para rotas chamada 'routes'.
-bp = Blueprint('routes', __name__)
+from . import bp
 
 @bp.route('/')
 @bp.route('/home')
