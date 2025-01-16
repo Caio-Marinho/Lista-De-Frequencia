@@ -100,12 +100,15 @@ pip install -r requirements.txt
 Uma vez Instalado, configure a conexão com o banco de dados no arquivo config.py e você pode iniciar o Projeto.
     
 ```
-flask run (desenvolvimento)
+flask run 
 ```
+(desenvolvimento)
 ou
 ```
-python.exe run.py (Produção)
+python.exe run.py 
 ```
+(Produção)
+
 ## Rotas
 Tem duas Rotas principais 
 uma que é a rota de cadastro que é a / ou /home que é acessada logo que inicia.
