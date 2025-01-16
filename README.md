@@ -102,14 +102,10 @@ Uma vez Instalado, configure a conexão com o banco de dados no arquivo config.p
 ```
 flask run 
 ```
-(desenvolvimento)
-```
-```
 ou
 ```
 python.exe run.py 
 ```
-(Produção)
 
 ## Rotas
 Tem duas Rotas principais 
