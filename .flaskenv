@@ -1,3 +1,3 @@
 FLASK_APP = "run.py"
 FLASK_ENV = "production"
-FLASK_DEBUG = "False"
+FLASK_DEBUG = False

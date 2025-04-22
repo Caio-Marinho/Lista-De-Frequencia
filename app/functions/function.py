@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 from app.schema.schema import DadosSchema_Calouros,DadosSchema_Voluntarios
-from PIL import Image, ImageDraw, ImageFont # type: ignore
+#from PIL import Image, ImageDraw, ImageFont # type: ignore
 class Funcion:
     """
     Classe utilitária para processamento e organização de dados para criação de arquivo Excel.

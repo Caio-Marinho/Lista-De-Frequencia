@@ -5,10 +5,12 @@ from app.schema.schema import DadosSchema_Calouros, DadosSchema_Voluntarios
 # Importa os modelos Calouros e Voluntarios do módulo models do pacote app.
 from app.models.models import Calouros, Voluntarios
 
+
 class Frequencia:
     """
     Classe base para consultar a frequência de calouros e voluntários.
     """
+
     def __init__(self, nome: str, email: str, dia: str):
         """
         Inicializa um objeto Frequencia com os atributos nome, email e dia.
@@ -25,13 +27,13 @@ class Frequencia:
     # Métodos get para acessar os atributos privados nome, email e dia.
     def get_nome(self):
         return self.__nome
-    
+
     def get_email(self):
         return self.__email
-    
+
     def get_dia(self):
         return self.__dia
-   
+
     def consulta_geral(entidade: str) -> list:
         """
         Consulta todos os registros da entidade no banco de dados.
@@ -76,106 +78,114 @@ class Frequencia:
                 'count': int(Voluntarios.query.filter_by(nome=self.__nome, email=self.__email).count())
             }
 
+
 class Calouro(Frequencia):
     """
     Classe para consultar a frequência de calouros.
     """
-    def consulta_frequencia(self) -> bool:
+
+    def consulta_frequencia(self) -> tuple[bool, bool] | None:
         """Consulta a frequência do calouro."""
         consultaCompletaDia = Calouros.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
             data=self.get_dia()
         ).all()
-        
+
         dadosCompletoDia = DadosSchema_Calouros(many=True).dumps(consultaCompletaDia, indent=2)
-        
+
         consultaCompleto = Calouros.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
         ).all()
-        
+
         dadosCompleto = DadosSchema_Calouros(many=True).dumps(consultaCompleto, indent=2)
-        
+
         consultaNome = Calouros.query.filter_by(
             nome=self.get_nome(),
         ).all()
-        
+
         dadosNome = DadosSchema_Calouros(many=True).dumps(consultaNome, indent=2)
-        
+
         consultaEmail = Calouros.query.filter_by(
             email=self.get_email(),
         ).all()
-        
+
         dadosEmail = DadosSchema_Calouros(many=True).dumps(consultaEmail, indent=2)
-        
+
         email_DadosCompleto = self.get_email() in dadosCompletoDia
-        
+
         email_DadosEmail = self.get_email() in dadosEmail
-        
+
         nome_dadosCompleto = self.get_nome() in dadosCompletoDia
-        
+
         RegistradaPresenca = self.get_dia() in dadosCompletoDia
-        
+
         nome_dadosNome = self.get_nome() in dadosNome
-        
-        Completo = all([self.get_nome() in dadosCompleto,self.get_email() in dadosCompleto])
-        
-        verdade = [Completo==email_DadosEmail,Completo==nome_dadosNome,not all([nome_dadosCompleto,email_DadosCompleto])]
-        
-        if len(dadosEmail)==0 and len(dadosNome)==0:
+
+        Completo = all([self.get_nome() in dadosCompleto, self.get_email() in dadosCompleto])
+
+        verdade = [Completo == email_DadosEmail, Completo == nome_dadosNome,
+                   not all([nome_dadosCompleto, email_DadosCompleto])]
+
+        if len(dadosEmail) == 0 and len(dadosNome) == 0:
             return True, RegistradaPresenca
         elif all(verdade):
             return all(verdade), RegistradaPresenca
+        return None
+
 
 class Voluntario(Frequencia):
     """
     Classe para consultar a frequência de voluntários.
     """
-    def consulta_frequencia(self) -> bool:
+
+    def consulta_frequencia(self) -> tuple[bool, bool] | None:
         """Consulta a frequência do Voluntario."""
         consultaCompletaDia = Voluntarios.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
             data=self.get_dia()
         ).all()
-        
+
         dadosCompletoDia = DadosSchema_Voluntarios(many=True).dumps(consultaCompletaDia, indent=2)
-        
+
         consultaCompleto = Voluntarios.query.filter_by(
             nome=self.get_nome(),
             email=self.get_email(),
         ).all()
-        
+
         dadosCompleto = DadosSchema_Voluntarios(many=True).dumps(consultaCompleto, indent=2)
-        
+
         consultaNome = Voluntarios.query.filter_by(
             nome=self.get_nome(),
         ).all()
-        
+
         dadosNome = DadosSchema_Voluntarios(many=True).dumps(consultaNome, indent=2)
-        
+
         consultaEmail = Voluntarios.query.filter_by(
             email=self.get_email(),
         ).all()
-        
+
         dadosEmail = DadosSchema_Voluntarios(many=True).dumps(consultaEmail, indent=2)
-        
+
         email_DadosCompleto = self.get_email() in dadosCompletoDia
-        
+
         email_DadosEmail = self.get_email() in dadosEmail
-        
+
         nome_dadosCompleto = self.get_nome() in dadosCompletoDia
-        
+
         RegistradaPresenca = self.get_dia() in dadosCompletoDia
-        
+
         nome_dadosNome = self.get_nome() in dadosNome
-        
-        Completo = all([self.get_nome() in dadosCompleto,self.get_email() in dadosCompleto])
-        
-        verdade = [Completo==email_DadosEmail,Completo==nome_dadosNome,not all([nome_dadosCompleto,email_DadosCompleto])]
-        
-        if len(dadosEmail)==0 and len(dadosNome)==0:
+
+        Completo = all([self.get_nome() in dadosCompleto, self.get_email() in dadosCompleto])
+
+        verdade = [Completo == email_DadosEmail, Completo == nome_dadosNome,
+                   not all([nome_dadosCompleto, email_DadosCompleto])]
+
+        if len(dadosEmail) == 0 and len(dadosNome) == 0:
             return True, RegistradaPresenca
         elif all(verdade):
             return all(verdade), RegistradaPresenca
+        return None

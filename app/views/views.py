@@ -20,8 +20,6 @@ from typing import Union, List
 # Operações do sistema operacional.
 import os
 
-from app.functions.function import enviar_email
-
 
 def index() -> str:
     """
