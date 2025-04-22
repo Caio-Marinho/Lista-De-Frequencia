@@ -1,5 +1,5 @@
 from . import ma
-from app.models import Calouros, Voluntarios
+from app.models.models import Calouros, Voluntarios
 
 class DadosSchema_Calouros(ma.SQLAlchemySchema):
     """

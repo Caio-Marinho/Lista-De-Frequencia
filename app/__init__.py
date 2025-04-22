@@ -1,8 +1,8 @@
 from flask import Flask  # Importa a classe Flask do pacote Flask.
-from app.models import db  # Importa o banco de dados definido no módulo models.
-from app.schema import ma  # Importa o Marshmallow para serialização/deserialização.
+from .models import db  # Importa o banco de dados definido no módulo models.
+from .schema import ma  # Importa o Marshmallow para serialização/deserialização.
 from Menage.menage import migrate, Migracao  # Importa o Flask-Migrate para migração de banco de dados.
-from app.Config.config import Config  # Importa as configurações do aplicativo do módulo config.
+from .Config.config import Config  # Importa as configurações do aplicativo do módulo config.
 from flask_cors import CORS  # Importa o Flask-CORS para lidar com o CORS.
 from flaskenv import arquivo_env  # Importa a função para criar um arquivo env para o ambiente de desenvolvimento.
 import asyncio  # Importa a biblioteca asyncio para suporte a programação assíncrona.
@@ -13,13 +13,13 @@ asyncio.run(arquivo_env())  # Cria um arquivo env para o ambiente de desenvolvim
 def create_app() -> Flask:
     """
     Função para criar o aplicativo Flask.
-    
+
     Esta função cria uma instância do aplicativo Flask, habilita o CORS para o aplicativo, carrega as configurações do arquivo config.py, inicializa o banco de dados e registra as rotas.
-    
+
     Returns:
         Flask: A instância do aplicativo Flask.
     """
-    Config.create_database()  # Chama a função para criar o banco de dados.
+    #Config.create_database()  # Chama a função para criar o banco de dados.
 
     app = Flask(__name__)  # Cria uma instância do aplicativo Flask.
 
