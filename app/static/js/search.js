@@ -54,8 +54,10 @@ function Rota_Atualizar(termoBusca, entidadeSelecionada) {
     if (termoBusca) {
         urlBusca += 'nome=' + encodeURIComponent(termoBusca) + '&';
     }
-    urlBusca += 'entidade=' + encodeURIComponent(entidadeSelecionada);
-    URL_BUSCA(urlBusca);;
+    if (entidadeSelecionada) {
+        urlBusca += 'entidade=' + encodeURIComponent(entidadeSelecionada);
+    }
+    URL_BUSCA(urlBusca);
     
 }
 function URL_BUSCA(urlBusca){
@@ -109,4 +111,4 @@ function navegarComParametros() {
     window.history.replaceState(null, '', urlBusca);
 }
 // Chama a função para atualizar a tabela quando a página carrega
-atualizarTabela();
+setInterval(atualizarTabela,1000);
