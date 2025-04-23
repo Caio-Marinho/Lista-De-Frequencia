@@ -8,13 +8,13 @@ class Config:
     def create_database() -> None:
         """
         Função para criar o banco de dados.
-        
+
         Esta função se conecta ao servidor MySQL e executa uma consulta SQL para criar o banco de dados 'FREQUENCIA' se ele não existir.
-        
+
         Returns:
             None
         """
-        engine = sqlalchemy.create_engine('mysql+mysqlconnector://root:teste@localhost:3306/')
+        engine = sqlalchemy.create_engine('mysql+mysqlconnector://listafrequencia:372306Kai@listafrequencia.mysql.pythonanywhere-services.com/')
         with engine.connect() as connection:
            connection.execute(sqlalchemy.text("CREATE DATABASE IF NOT EXISTS FREQUENCIA;"))
 
@@ -30,8 +30,8 @@ class Config:
 
     # Define a URI do banco de dados para MySQL.
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI',
-                                             'mysql+mysqlconnector://root:teste@localhost:3306/frequencia')
-    
+                                             'mysql+mysqlconnector://listafrequencia:372306Kai@listafrequencia.mysql.pythonanywhere-services.com/listafrequencia$frequencia')
+
     # Define se as modificações no banco de dados devem ser rastreadas. Isso ajuda no controle de versão do banco de
     # dados.
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS',
@@ -41,9 +41,9 @@ class Config:
     # Isso é útil durante o desenvolvimento, mas deve ser desativado em produção para melhorar o desempenho.
     TEMPLATES_AUTO_RELOAD = os.environ.get('TEMPLATES_AUTO_RELOAD', True)
 
-    
+
     """
-    
+
     URI de conexão para um banco de dados MySQL.
 
     Formato da URI:
@@ -54,7 +54,7 @@ class Config:
     """
 
     # Define a URI do banco de dados para PostgresSQL.
-    """SQLALCHEMY_DATABASE_URI_POSTGRES = os.environ.get('SQLALCHEMY_DATABASE_URI_POSTGRES', 
+    """SQLALCHEMY_DATABASE_URI_POSTGRES = os.environ.get('SQLALCHEMY_DATABASE_URI_POSTGRES',
     'postgresql://postgres:teste@localhost/frequencia')
 
     URI de conexão para um banco de dados PostgresSQL.
@@ -67,9 +67,9 @@ class Config:
     """
 
     # Define a URI do banco de dados para MariaDB.
-    """SQLALCHEMY_DATABASE_URI_MARIADB = os.environ.get('SQLALCHEMY_DATABASE_URI_MARIADB', 
+    """SQLALCHEMY_DATABASE_URI_MARIADB = os.environ.get('SQLALCHEMY_DATABASE_URI_MARIADB',
     'mysql+mysqlconnector://root:teste@localhost/frequencia')
-    
+
     URI de conexão para um banco de dados MariaDB.
 
     Formato da URI:
@@ -83,7 +83,7 @@ class Config:
 
     """
     SQLALCHEMY_DATABASE_URI_SQLITE = os.environ.get('SQLALCHEMY_DATABASE_URI_SQLITE', 'sqlite:///path/to/database.db')
-    
+
     URI de conexão para um banco de dados SQLite.
 
     Formato da URI:
@@ -94,9 +94,9 @@ class Config:
     """
 
     # Define a URI do banco de dados para Oracle.
-    """SQLALCHEMY_DATABASE_URI_ORACLE = os.environ.get('SQLALCHEMY_DATABASE_URI_ORACLE', 
+    """SQLALCHEMY_DATABASE_URI_ORACLE = os.environ.get('SQLALCHEMY_DATABASE_URI_ORACLE',
     'oracle://username:password@hostname:port/sid')
-    
+
     URI de conexão para um banco de dados Oracle.
 
     Formato da URI:
@@ -107,9 +107,9 @@ class Config:
     """
 
     # Define a URI do banco de dados para Microsoft SQL Server.
-    """SQLALCHEMY_DATABASE_URI_MSSQL = os.environ.get('SQLALCHEMY_DATABASE_URI_MSSQL', 
+    """SQLALCHEMY_DATABASE_URI_MSSQL = os.environ.get('SQLALCHEMY_DATABASE_URI_MSSQL',
     'mssql+pyodbc://username:password@hostname:port/database?driver=ODBC+Driver+17+for+SQL+Server')
-    
+
     URI de conexão para um banco de dados Microsoft SQL Server.
 
     Formato da URI:

@@ -14,9 +14,9 @@ if __name__ == '__main__':
     from waitress import serve
     # Define o endereço IP como "0.0.0.0" para que o aplicativo seja acessível em todas as interfaces de rede
     host = "0.0.0.0"
-    
+
     # Define a porta como 5000 para acessar o aplicativo via porta padrão
     port = 5000
-    
+
     # Inicia o servidor Waitress para servir a aplicação Flask
-    serve(app, host=host, port=port)
+    serve(app)

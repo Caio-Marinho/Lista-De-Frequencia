@@ -28,7 +28,7 @@ def index() -> str:
     Returns:
         str: O conteúdo renderizado do template index.html.
     """
-    return render_template('index.html')
+    return render_template('Index.html')
 
 
 def Registro_Frequencia():
@@ -46,19 +46,19 @@ def Registro_Frequencia():
             # Obtém dados JSON da requisição POST
             dados = request.get_json()
             sua_data: str = str(date.today())
-            
+
             # Cria instâncias para manipulação de frequência, calouro e voluntário
             Presencas = Frequencia(dados['student-name'], dados['email'], sua_data)
             calouro = Calouro(dados['student-name'], dados['email'], sua_data)
             voluntario = Voluntario(dados['student-name'], dados['email'], sua_data)
-            
+
             # Consulta a frequência para o dia e email especificados
             usuario_calouro, CadastroDiaCalouro = calouro.consulta_frequencia()
             usuario_voluntario,CadastroDiaVoluntario = voluntario.consulta_frequencia()
-            
+
             registroPendenteCalouro = (usuario_calouro) and (not CadastroDiaCalouro)
             registroPendenteVoluntario = (usuario_voluntario) and  (not CadastroDiaVoluntario)
-            
+
             PermissaoCalouro =  registroPendenteCalouro and (dados['tipo'] in ('Calouro', 'Calouros', 'calouro', 'calouros'))
             PermissaoVoluntario = registroPendenteVoluntario and \
                 (dados['tipo'] in ('Voluntario', 'Voluntarios', 'voluntario', 'voluntarios'))
@@ -101,10 +101,10 @@ def consulta_presenca(entidade: str = None, nome: str = None) -> Union[str, List
 
         # Filtra a lista com base no nome fornecido
         listaFiltrada = [sublista for sublista in listaOrganizada if any(str(nome).lower() in texto.lower() for texto in sublista)]
-        
+
         # Seleciona a lista a ser exibida
         listaExibida = listaFiltrada if listaFiltrada else listaOrganizada
-        
+
         return render_template('Consulta.html', consulta=listaExibida)
     except:
         return redirect(url_for('routes.consulta'))
