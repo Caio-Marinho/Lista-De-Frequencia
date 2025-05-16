@@ -431,7 +431,7 @@ tornado==6.4.2
 tqdm==4.66.5
 traitlets==5.14.3
 transaction==4.0
-transformers==4.48.0
+transformers==4.50.0
 translationstring==1.4
 trio==0.26.2
 trio-websocket==0.11.1
